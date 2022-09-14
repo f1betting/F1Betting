@@ -4,13 +4,14 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.routing import APIRoute
 from pymongo import MongoClient
 
-from routers import bets, user
+from routers import bets, user, results
 
 app = FastAPI()
 
 # Include routers
 app.include_router(user.router)
 app.include_router(bets.router)
+app.include_router(results.router)
 
 
 @app.on_event("startup")
@@ -35,12 +36,12 @@ def custom_openapi():
         return app.openapi_schema
 
     openapi_schema = get_openapi(
-        title="F1 API",
+        title="F1 BETTING",
         version="1.0.0",
-        description="An easier way to use the [ergast.com](https://ergast.com/mrd/) F1 API, with correct types!",
+        description="An API to do bets with your friends about F1 race results!",
         license_info={
             "name": "MIT",
-            "url": "https://github.com/niek-o/F1API/blob/main/LICENSE.md"
+            "url": "https://github.com/niek-o/F1Betting/blob/main/LICENSE.md"
         },
         routes=app.routes,
     )

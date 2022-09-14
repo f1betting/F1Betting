@@ -5,7 +5,6 @@ from classes.betting.user import FullUser
 
 class BaseBet(BaseModel):
     username: str
-    round: int
     p1: str
     p2: str
     p3: str
@@ -13,6 +12,7 @@ class BaseBet(BaseModel):
 
 class FullBet(BaseModel):
     user: FullUser
+    season: int
     round: int
     p1: str
     p2: str
@@ -21,6 +21,7 @@ class FullBet(BaseModel):
 
 BetExample = {
     "username": "Niek",
+    "season": 2022,
     "round": 16,
     "p1": "VER",
     "p2": "LEC",

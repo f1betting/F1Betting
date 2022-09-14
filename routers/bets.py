@@ -1,3 +1,5 @@
+import requests
+from dotenv import dotenv_values
 from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
@@ -5,6 +7,8 @@ from fastapi.responses import JSONResponse
 import main
 from classes.betting.bet import BetExample, BaseBet, FullBet
 from classes.general.message import Message, create_message
+
+config = dotenv_values(".env")
 
 router = APIRouter(
     prefix="/bet",
@@ -60,12 +64,22 @@ def get_bet(username: str, race: int):
                  }}
              })
 def create_bet(bet: BaseBet):
+    ip = config["F1_API"]
+
+    url = f"http://{ip}/event/next"
+
+    res = requests.get(url)
+    data = res.json()
+
     bet.username = bet.username.lower()
     bet.p1 = bet.p1.upper()
     bet.p2 = bet.p2.upper()
     bet.p3 = bet.p3.upper()
 
     bet = jsonable_encoder(bet)
+
+    bet["season"] = data["season"]
+    bet["round"] = data["round"]
 
     user = main.app.database["Users"].find_one({"username": bet["username"]})
 
@@ -76,7 +90,7 @@ def create_bet(bet: BaseBet):
 
     bet["user"] = user
 
-    if list(main.app.database["Bets"].find({"user": bet["user"], "round": bet["round"]})):
+    if list(main.app.database["Bets"].find({"user": bet["user"], "season": bet["season"], "round": bet["round"]})):
         return JSONResponse(status_code=409, content=create_message("Bet already exists"))
 
     new_bet = main.app.database["Bets"].insert_one(bet)
@@ -96,17 +110,17 @@ def create_bet(bet: BaseBet):
                 }},
                 200: {"model": Message, "content": {
                     "application/json": {
-                        "example": create_message("Bet updated succesfully")
+                        "example": create_message("Bet updated successfully")
                     }
                 }},
             })
-def edit_bet(username: str, race: int, p1: str, p2: str, p3: str):
+def edit_bet(username: str, race: int, season: int, p1: str, p2: str, p3: str):
     user = main.app.database["Users"].find_one({"username": username.lower()})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    bet = main.app.database["Bets"].find_one({"user": user, "round": race})
+    bet = main.app.database["Bets"].find_one({"user": user, "round": race, "season": season})
 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))
@@ -117,7 +131,7 @@ def edit_bet(username: str, race: int, p1: str, p2: str, p3: str):
         "p3": p3.upper()
     }})
 
-    return create_message("Bet updated succesfully")
+    return create_message("Bet updated successfully")
 
 
 @router.delete("/{username}/{race}",
@@ -131,7 +145,7 @@ def edit_bet(username: str, race: int, p1: str, p2: str, p3: str):
                    }},
                    200: {"model": Message, "content": {
                        "application/json": {
-                           "example": create_message("Bet deleted succesfully")
+                           "example": create_message("Bet deleted successfully")
                        }
                    }},
                })
@@ -148,4 +162,4 @@ def delete_bet(username: str, race: int):
 
     main.app.database["Bets"].delete_one({"_id": bet["_id"]})
 
-    return create_message("Bet deleted succesfully")
+    return create_message("Bet deleted successfully")
