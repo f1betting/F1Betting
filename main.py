@@ -9,8 +9,8 @@ from routers import bets, user
 app = FastAPI()
 
 # Include routers
-app.include_router(user.router, prefix="/betting")
-app.include_router(bets.router, prefix="/betting")
+app.include_router(user.router)
+app.include_router(bets.router)
 
 
 @app.on_event("startup")
