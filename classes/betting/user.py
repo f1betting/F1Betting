@@ -12,8 +12,8 @@ class FullUser(BaseUser):
     points: int
 
 
-class Users(list[FullUser]):
-    pass
+class Users(BaseModel):
+    users: list[FullUser]
 
 
 UserExample = {

@@ -24,9 +24,11 @@ router = APIRouter(
                 }},
                 200: {"model": Users, "content": {
                     "application/json": {
-                        "example": [
-                            UserExample
-                        ]
+                        "example": {
+                            "users": [
+                                UserExample
+                            ]
+                        }
                     }
                 }}
             })
@@ -39,7 +41,7 @@ def get_all_users():
     for user in users:
         del user["_id"]
 
-    return users
+    return {"users": users}
 
 
 @router.get("/{username}",
