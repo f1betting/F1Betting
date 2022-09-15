@@ -1,14 +1,12 @@
 import requests
 from dotenv import dotenv_values
 from fastapi import APIRouter
-from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
 import main
-from classes.betting.bet import FullBet, BetExample, BetResults
-from classes.betting.user import UserExample, BaseUser, FullUser, Users
-from classes.betting.user_results import UserResults, UserResultExample, UserResult
-from classes.general.message import Message, create_message
+from internal.logic.results.get_points import get_points
+from internal.models.betting.user_results import UserResults, UserResultExample, UserResult
+from internal.models.general.message import Message, create_message
 
 config = dotenv_values(".env")
 
@@ -50,18 +48,7 @@ def get_all_results_for_round(season: int, race: int):
     results = results["results"]
 
     for bet in bets:
-        round_points = 0
-
-        for result in results:
-            if result["position"] < 4:
-                if result["Driver"]["code"] == bet["p1"]:
-                    round_points += 3
-
-                if result["Driver"]["code"] == bet["p2"]:
-                    round_points += 2
-
-                if result["Driver"]["code"] == bet["p3"]:
-                    round_points += 1
+        round_points = get_points(results, bet)
 
         main.app.database["Bets"].update_one({"username": bet["username"]}, {"$set": {
             "points": round_points
@@ -108,18 +95,7 @@ def update_users_for_round(season: int, race: int):
     results = results["results"]
 
     for bet in bets:
-        round_points = 0
-
-        for result in results:
-            if result["position"] < 4:
-                if result["Driver"]["code"] == bet["p1"]:
-                    round_points += 3
-
-                if result["Driver"]["code"] == bet["p2"]:
-                    round_points += 2
-
-                if result["Driver"]["code"] == bet["p3"]:
-                    round_points += 1
+        round_points = get_points(results, bet)
 
         user = main.app.database["Users"].find_one({"username": bet["username"]})
 

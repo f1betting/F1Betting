@@ -1,7 +1,5 @@
 from pydantic import BaseModel
 
-from classes.betting.user import FullUser
-
 
 class BaseBet(BaseModel):
     username: str

@@ -5,8 +5,8 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
 import main
-from classes.betting.bet import BetExample, BaseBet, FullBet
-from classes.general.message import Message, create_message
+from internal.models.betting.bet import BetExample, BaseBet, FullBet
+from internal.models.general.message import Message, create_message
 
 config = dotenv_values(".env")
 

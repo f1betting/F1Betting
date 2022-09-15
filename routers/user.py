@@ -5,8 +5,8 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
 import main
-from classes.betting.user import UserExample, BaseUser, FullUser, Users
-from classes.general.message import Message, create_message
+from internal.models.betting.user import UserExample, BaseUser, FullUser, Users
+from internal.models.general.message import Message, create_message
 
 router = APIRouter(
     prefix="/users",

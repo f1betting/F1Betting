@@ -1,8 +1,8 @@
 from pydantic import BaseModel
-from classes.f1.constructor import Constructor
-from classes.f1.driver import Driver
-from classes.f1.internal.time import Time
-from classes.f1.internal.fastest_lap import FastestLap
+from internal.models.f1.constructor import Constructor
+from internal.models.f1.driver import Driver
+from internal.models.f1.internal.time import Time
+from internal.models.f1.internal.fastest_lap import FastestLap
 
 
 class RaceResult(BaseModel):
