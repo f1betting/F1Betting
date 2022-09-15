@@ -17,7 +17,7 @@ router = APIRouter(
 
 
 @router.get("/{username}/{race}",
-            response_model=Message,
+            response_model=FullBet,
             responses={
                 404: {"model": Message, "content": {
                     "application/json": {
@@ -36,7 +36,7 @@ def get_bet(username: str, race: int):
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    bet = main.app.database["Bets"].find_one({"user": user, "round": race})
+    bet = main.app.database["Bets"].find_one({"username": user["username"], "round": race})
 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))
@@ -76,21 +76,35 @@ def create_bet(bet: BaseBet):
     bet.p2 = bet.p2.upper()
     bet.p3 = bet.p3.upper()
 
+    if bet.p1 == bet.p2 or bet.p2 == bet.p3 or bet.p1 == bet.p3:
+        return JSONResponse(status_code=409, content=create_message("Duplicate drivers"))
+
     bet = jsonable_encoder(bet)
+
+    drivers_url = f"http://{ip}/drivers/{data['season']}"
+    drivers_res = requests.get(drivers_url)
+    drivers_data = drivers_res.json()
+    drivers = drivers_data["drivers"]
+
+    driver_codes = []
+
+    for driver in drivers:
+        driver_codes.append(driver["code"])
+
+    if not bet["p1"] in driver_codes or not bet["p2"] in driver_codes or not bet["p3"] in driver_codes:
+        return JSONResponse(status_code=404, content=create_message("Driver not found"))
 
     bet["season"] = data["season"]
     bet["round"] = data["round"]
+    bet["points"] = 0
 
     user = main.app.database["Users"].find_one({"username": bet["username"]})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    del bet["username"]
-
-    bet["user"] = user
-
-    if list(main.app.database["Bets"].find({"user": bet["user"], "season": bet["season"], "round": bet["round"]})):
+    if list(main.app.database["Bets"].find(
+            {"username": user["username"], "season": bet["season"], "round": bet["round"]})):
         return JSONResponse(status_code=409, content=create_message("Bet already exists"))
 
     new_bet = main.app.database["Bets"].insert_one(bet)
@@ -120,10 +134,25 @@ def edit_bet(username: str, race: int, season: int, p1: str, p2: str, p3: str):
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    bet = main.app.database["Bets"].find_one({"user": user, "round": race, "season": season})
+    bet = main.app.database["Bets"].find_one({"username": user["username"], "round": race, "season": season})
 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))
+
+    ip = config["F1_API"]
+
+    drivers_url = f"http://{ip}/drivers/{season}"
+    drivers_res = requests.get(drivers_url)
+    drivers_data = drivers_res.json()
+    drivers = drivers_data["drivers"]
+
+    driver_codes = []
+
+    for driver in drivers:
+        driver_codes.append(driver["code"])
+
+    if not p1.upper() in driver_codes or not p2.upper() in driver_codes or not p3.upper() in driver_codes:
+        return JSONResponse(status_code=404, content=create_message("Driver not found"))
 
     main.app.database["Bets"].update_one({"_id": bet["_id"]}, {"$set": {
         "p1": p1.upper(),
@@ -155,7 +184,7 @@ def delete_bet(username: str, race: int):
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    bet = main.app.database["Bets"].find_one({"user": user, "round": race})
+    bet = main.app.database["Bets"].find_one({"username": user["username"], "round": race})
 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))

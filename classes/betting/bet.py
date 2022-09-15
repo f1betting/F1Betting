@@ -10,20 +10,22 @@ class BaseBet(BaseModel):
     p3: str
 
 
-class FullBet(BaseModel):
-    user: FullUser
+class FullBet(BaseBet):
     season: int
     round: int
-    p1: str
-    p2: str
-    p3: str
+    points: int
+
+
+class BetResults(BaseModel):
+    results: list[FullBet]
 
 
 BetExample = {
-    "username": "Niek",
-    "season": 2022,
-    "round": 16,
-    "p1": "VER",
+    "username": "niek",
+    "p1": "RUS",
     "p2": "LEC",
     "p3": "RUS",
+    "season": 2022,
+    "round": 16,
+    "points": 2
 }

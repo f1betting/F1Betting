@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
 import main
-from classes.betting.bet import FullBet
+from classes.betting.bet import FullBet, BetExample, BetResults
 from classes.betting.user import UserExample, BaseUser, FullUser, Users
 from classes.general.message import Message, create_message
 
@@ -18,18 +18,20 @@ router = APIRouter(
 
 
 @router.get("/{season}/{race}",
-            response_model=int,
+            response_model=BetResults,
             responses={
                 404: {"model": Message, "content": {
                     "application/json": {
                         "example": create_message("Users not found")
                     }
                 }},
-                200: {"model": FullBet, "content": {
+                200: {"model": Users, "content": {
                     "application/json": {
-                        "example": [
-                            UserExample
-                        ]
+                        "example": {
+                            "results": [
+                                BetExample
+                            ]
+                        }
                     }
                 }}
             })
@@ -46,13 +48,13 @@ def get_all_results_for_round(season: int, race: int):
     results = res.json()
     results = results["results"]
 
-    updated_users = None
-
     for bet in bets:
         round_points = 0
 
         for result in results:
-            if result["position"] < 3:
+            print(result)
+
+            if result["position"] < 4:
                 if result["Driver"]["code"] == bet["p1"]:
                     round_points += 3
 
@@ -62,10 +64,22 @@ def get_all_results_for_round(season: int, race: int):
                 if result["Driver"]["code"] == bet["p3"]:
                     round_points += 1
 
-        user = main.app.database["Users"].find_one({"_id": bet["user"]["_id"]})
+        user = main.app.database["Users"].find_one({"username": bet["username"]})
 
-        updated_users = main.app.database["Users"].update_one({"_id": bet["user"]["_id"]}, {"$set": {
+        main.app.database["Bets"].update_one({"username": bet["username"]}, {"$set": {
+            "points": round_points
+        }})
+
+        main.app.database["Users"].update_one({"username": bet["username"]}, {"$set": {
             "points": user["points"] + round_points
-        }}, upsert=False)
+        }})
 
-    return round_points
+    bets = list(main.app.database["Bets"].find({"season": season, "round": race}))
+
+    if not bets:
+        return JSONResponse(status_code=404, content=create_message("Bets not found"))
+
+    for bet in bets:
+        del bet["_id"]
+
+    return {"results": bets}
