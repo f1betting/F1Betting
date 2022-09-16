@@ -7,7 +7,7 @@ class BettingDatabase:
     client: MongoClient
     database: Database
 
-    def __init__(self):
+    def connect(self):
         config = dotenv_values(".env")
 
         self.client = MongoClient(config["DB_URI"])
@@ -17,5 +17,28 @@ class BettingDatabase:
     def shutdown(self):
         self.client.close()
 
+    def get_database(self):
+        return self.database
 
-db = BettingDatabase()
+
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+class SingletonDatabase(BettingDatabase, metaclass=Singleton):
+    pass
+
+
+database = SingletonDatabase()
+database.connect()
+
+db = database
+
+
+def get_database():
+    return database.database
