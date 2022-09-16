@@ -2,14 +2,14 @@ import requests
 from dotenv import dotenv_values
 from rocketry import Rocketry
 
-from main import database
+from internal.database import get_database
 from internal.logic.results.get_points import get_points
 
 config = dotenv_values(".env")
 
 app = Rocketry()
 
-db = database.get_database()
+db = get_database()
 
 
 @app.task("every 5 seconds")

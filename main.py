@@ -3,11 +3,8 @@ import logging
 
 import uvicorn
 
-from internal.api import app as app_fastapi
-from internal.database import SingletonDatabase
 from internal.scheduler import app as app_rocketry
-
-database = SingletonDatabase()
+from internal.api import app as app_fastapi
 
 
 class Server(uvicorn.Server):
@@ -17,8 +14,6 @@ class Server(uvicorn.Server):
 
 
 async def main():
-    database.connect()
-
     server = Server(config=uvicorn.Config(app_fastapi, workers=1, loop="asyncio", port=8001))
 
     api = asyncio.create_task(server.serve())
