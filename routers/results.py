@@ -55,7 +55,7 @@ def get_all_results_for_round(season: int, race: int):
         }})
 
     bets = list(db.database["Bets"].find({"season": season, "round": race},
-                                   {"_id": 0, "p1": 0, "p2": 0, "p3": 0, "season": 0, "round": 0}))
+                                         {"_id": 0, "p1": 0, "p2": 0, "p3": 0, "season": 0, "round": 0}))
 
     if not bets:
         return JSONResponse(status_code=404, content=create_message("Bets not found"))
