@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from database import db
+from internal.database import db
 from internal.models.betting.user import UserExample, BaseUser, FullUser, Users
 from internal.models.general.message import Message, create_message
 

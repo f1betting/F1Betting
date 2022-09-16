@@ -8,7 +8,7 @@ class BettingDatabase:
     database: Database
 
     def __init__(self):
-        config = dotenv_values(".env")
+        config = dotenv_values("../.env")
 
         self.client = MongoClient(config["DB_URI"])
         self.database = self.client[config["DB_NAME"]]

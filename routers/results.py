@@ -3,7 +3,7 @@ from dotenv import dotenv_values
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from database import db
+from internal.database import db
 from internal.logic.results.get_points import get_points
 from internal.models.betting.user_results import UserResults, UserResultExample
 from internal.models.general.message import Message, create_message

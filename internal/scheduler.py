@@ -5,7 +5,7 @@ from rocketry import Rocketry
 from database import db
 from internal.logic.results.get_points import get_points
 
-config = dotenv_values(".env")
+config = dotenv_values("../.env")
 
 app = Rocketry()
 
