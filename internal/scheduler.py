@@ -2,17 +2,15 @@ import requests
 from dotenv import dotenv_values
 from rocketry import Rocketry
 
-from internal.database import get_database
+from internal.database import database
 from internal.logic.results.get_points import get_points
 
 config = dotenv_values(".env")
 
 app = Rocketry()
 
-db = get_database()
 
-
-@app.task("every 5 seconds")
+@app.task("weekly on monday")
 def update_users():
     ip = config["F1_API"]
 
@@ -23,7 +21,7 @@ def update_users():
     season = data["season"]
     race = data["round"] - 1
 
-    bets = list(db["Bets"].find({"round": race}))
+    bets = list(database["Bets"].find({"round": race}))
 
     url = f"http://{ip}/results/race/{season}/{race}"
     res = requests.get(url)
@@ -33,20 +31,20 @@ def update_users():
     for bet in bets:
         round_points = get_points(results, bet)
 
-        db["Bets"].update_one({"username": bet["username"]}, {"$set": {
+        database["Bets"].update_one({"username": bet["username"]}, {"$set": {
             "points": round_points
         }})
 
-    users = list(db["Users"].find({}, {"_id": False}).sort("points", -1))
+    users = list(database["Users"].find({}, {"_id": False}).sort("points", -1))
 
     for user in users:
-        all_bets = list(db["Bets"].find({"username": user["username"], "season": season}))
+        all_bets = list(database["Bets"].find({"username": user["username"], "season": season}))
 
         all_points = 0
 
         for bet in all_bets:
             all_points += bet["points"]
 
-        db["Users"].update_one({"username": user["username"]}, {"$set": {
+        database["Users"].update_one({"username": user["username"]}, {"$set": {
             "points": all_points
         }})

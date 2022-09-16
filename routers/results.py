@@ -3,7 +3,7 @@ from dotenv import dotenv_values
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from internal.database import db
+from internal.database import database
 from internal.logic.results.get_points import get_points
 from internal.models.betting.user_results import UserResults, UserResultExample
 from internal.models.general.message import Message, create_message
@@ -35,7 +35,7 @@ router = APIRouter(
                 }}
             })
 def get_all_results_for_round(season: int, race: int):
-    bets = list(db.database["Bets"].find({"round": race}))
+    bets = list(database["Bets"].find({"round": race}))
 
     if not bets:
         return JSONResponse(status_code=404, content=create_message("Users not found"))
@@ -50,12 +50,12 @@ def get_all_results_for_round(season: int, race: int):
     for bet in bets:
         round_points = get_points(results, bet)
 
-        db.database["Bets"].update_one({"username": bet["username"]}, {"$set": {
+        database["Bets"].update_one({"username": bet["username"]}, {"$set": {
             "points": round_points
         }})
 
-    bets = list(db.database["Bets"].find({"season": season, "round": race},
-                                         {"_id": 0, "p1": 0, "p2": 0, "p3": 0, "season": 0, "round": 0}))
+    bets = list(database["Bets"].find({"season": season, "round": race},
+                                      {"_id": 0, "p1": 0, "p2": 0, "p3": 0, "season": 0, "round": 0}))
 
     if not bets:
         return JSONResponse(status_code=404, content=create_message("Bets not found"))
@@ -82,7 +82,7 @@ def get_all_results_for_round(season: int, race: int):
                 }}
             })
 def get_standings():
-    users = list(db.database["Users"].find({}, {"_id": False, "uuid": False}).sort("points", -1))
+    users = list(database["Users"].find({}, {"_id": False, "uuid": False}).sort("points", -1))
 
     if not users:
         return JSONResponse(status_code=404, content=create_message("Users not found"))

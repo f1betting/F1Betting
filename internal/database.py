@@ -20,9 +20,4 @@ class BettingDatabase:
 
 database = BettingDatabase()
 database.connect()
-
-db = database
-
-
-def get_database():
-    return database.database
+database = database.database
