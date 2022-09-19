@@ -26,7 +26,6 @@ def update_users():
 
     for round in calendar["events"]:
         race = round["round"]
-        print(race)
 
         bets = list(db.database["Bets"].find({"round": race}))
 
@@ -36,12 +35,7 @@ def update_users():
 
         if "results" in results.keys():
             for bet in bets:
-                print(bet)
-                print(results["results"])
-
                 round_points = get_points(results["results"], bet)
-
-                print(round_points)
 
                 db.database["Bets"].update_one({"username": bet["username"], "round": race}, {"$set": {
                     "points": round_points
