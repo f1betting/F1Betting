@@ -14,26 +14,38 @@ app = Rocketry()
 def update_users():
     ip = config["F1_API"]
 
-    url = f"http://{ip}/event/next"
-    res = requests.get(url)
-    data = res.json()
+    event_url = f"http://{ip}/event/next"
+    event_res = requests.get(event_url)
+    event = event_res.json()
 
-    season = data["season"]
-    race = data["round"] - 1
+    season = event["season"]
 
-    bets = list(db.database["Bets"].find({"round": race}))
+    calendar_url = f"http://{ip}/calendar/{season}"
+    calendar_res = requests.get(calendar_url)
+    calendar = calendar_res.json()
 
-    url = f"http://{ip}/results/race/{season}/{race}"
-    res = requests.get(url)
-    results = res.json()
-    results = results["results"]
+    for round in calendar["events"]:
+        race = round["round"]
+        print(race)
 
-    for bet in bets:
-        round_points = get_points(results, bet)
+        bets = list(db.database["Bets"].find({"round": race}))
 
-        db.database["Bets"].update_one({"username": bet["username"]}, {"$set": {
-            "points": round_points
-        }})
+        race_url = f"http://{ip}/results/race/{season}/{race}"
+        race_res = requests.get(race_url)
+        results = race_res.json()
+
+        if "results" in results.keys():
+            for bet in bets:
+                print(bet)
+                print(results["results"])
+
+                round_points = get_points(results["results"], bet)
+
+                print(round_points)
+
+                db.database["Bets"].update_one({"username": bet["username"], "round": race}, {"$set": {
+                    "points": round_points
+                }})
 
     users = list(db.database["Users"].find({}, {"_id": False}).sort("points", -1))
 
