@@ -1,8 +1,6 @@
-from dotenv import dotenv_values
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from fastapi.routing import APIRoute
-from pymongo import MongoClient
 
 from routers import bets, user, results
 
