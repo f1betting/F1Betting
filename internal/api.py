@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from fastapi.routing import APIRoute
+from fastapi.middleware.cors import CORSMiddleware
 
 from routers import bets, user, results
 
@@ -10,6 +11,15 @@ app = FastAPI()
 app.include_router(user.router)
 app.include_router(bets.router)
 app.include_router(results.router)
+
+# Allow all origins
+origins = ["*"]
+
+app.add_middleware(CORSMiddleware,
+                   allow_origins=origins,
+                   allow_credentials=True,
+                   allow_methods=["*"],
+                   allow_headers=["*"])
 
 
 # CUSTOMIZE OPENAPI
