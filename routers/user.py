@@ -87,7 +87,9 @@ def create_user(user: BaseUser):
     user = jsonable_encoder(user)
 
     user["points"] = 0
-    user["uuid"] = str(uuid.uuid4())
+
+    if not user["uuid"]:
+        user["uuid"] = str(uuid.uuid4())
 
     if list(db.database["Users"].find({"username": user["username"]})):
         return JSONResponse(status_code=409, content=create_message("User already exists"))

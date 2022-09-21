@@ -5,10 +5,10 @@ from pydantic import BaseModel
 
 class BaseUser(BaseModel):
     username: str
+    uuid: str | None
 
 
 class FullUser(BaseUser):
-    uuid: str
     points: int
 
 
