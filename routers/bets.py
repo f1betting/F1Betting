@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from internal.database import db
+from internal.database import database
 from internal.models.betting.bet import BetExample, BaseBet, FullBet
 from internal.models.general.message import Message, create_message
 
@@ -31,12 +31,12 @@ router = APIRouter(
                 }},
             })
 def get_bet(username: str, race: int):
-    user = db.database["Users"].find_one({"username": username.lower()})
+    user = database["Users"].find_one({"username": username.lower()})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    bet = db.database["Bets"].find_one({"username": user["username"], "round": race})
+    bet = database["Bets"].find_one({"username": user["username"], "round": race})
 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))
@@ -98,18 +98,18 @@ def create_bet(bet: BaseBet):
     bet["round"] = data["round"]
     bet["points"] = 0
 
-    user = db.database["Users"].find_one({"username": bet["username"]})
+    user = database["Users"].find_one({"username": bet["username"]})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    if list(db.database["Bets"].find(
+    if list(database["Bets"].find(
             {"username": user["username"], "season": bet["season"], "round": bet["round"]})):
         return JSONResponse(status_code=409, content=create_message("Bet already exists"))
 
-    new_bet = db.database["Bets"].insert_one(bet)
+    new_bet = database["Bets"].insert_one(bet)
 
-    created_bet = db.database["Bets"].find_one({"_id": new_bet.inserted_id})
+    created_bet = database["Bets"].find_one({"_id": new_bet.inserted_id})
 
     return created_bet
 
@@ -129,12 +129,12 @@ def create_bet(bet: BaseBet):
                 }},
             })
 def edit_bet(username: str, race: int, season: int, p1: str, p2: str, p3: str):
-    user = db.database["Users"].find_one({"username": username.lower()})
+    user = database["Users"].find_one({"username": username.lower()})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    bet = db.database["Bets"].find_one({"username": user["username"], "round": race, "season": season})
+    bet = database["Bets"].find_one({"username": user["username"], "round": race, "season": season})
 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))
@@ -154,7 +154,7 @@ def edit_bet(username: str, race: int, season: int, p1: str, p2: str, p3: str):
     if not p1.upper() in driver_codes or not p2.upper() in driver_codes or not p3.upper() in driver_codes:
         return JSONResponse(status_code=404, content=create_message("Driver not found"))
 
-    db.database["Bets"].update_one({"_id": bet["_id"]}, {"$set": {
+    database["Bets"].update_one({"_id": bet["_id"]}, {"$set": {
         "p1": p1.upper(),
         "p2": p2.upper(),
         "p3": p3.upper()
@@ -179,16 +179,16 @@ def edit_bet(username: str, race: int, season: int, p1: str, p2: str, p3: str):
                    }},
                })
 def delete_bet(username: str, race: int):
-    user = db.database["Users"].find_one({"username": username.lower()})
+    user = database["Users"].find_one({"username": username.lower()})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    bet = db.database["Bets"].find_one({"username": user["username"], "round": race})
+    bet = database["Bets"].find_one({"username": user["username"], "round": race})
 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))
 
-    db.database["Bets"].delete_one({"_id": bet["_id"]})
+    database["Bets"].delete_one({"_id": bet["_id"]})
 
     return create_message("Bet deleted successfully")

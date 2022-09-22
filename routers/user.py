@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from internal.database import db
+from internal.database import database
 from internal.models.betting.user import UserExample, BaseUser, FullUser, Users
 from internal.models.general.message import Message, create_message
 
@@ -33,13 +33,10 @@ router = APIRouter(
                 }}
             })
 def get_all_users():
-    users = list(db.database["Users"].find())
+    users = list(database["Users"].find({}, {"_id": 0}))
 
     if not users:
         return JSONResponse(status_code=404, content=create_message("Users not found"))
-
-    for user in users:
-        del user["_id"]
 
     return {"users": users}
 
@@ -59,7 +56,7 @@ def get_all_users():
                 }}
             })
 def get_user_by_username(username: str):
-    user = db.database["Users"].find_one({"username": username})
+    user = database["Users"].find_one({"username": username})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
@@ -91,11 +88,11 @@ def create_user(user: BaseUser):
     if not user["uuid"]:
         user["uuid"] = str(uuid.uuid4())
 
-    if list(db.database["Users"].find({"username": user["username"]})):
+    if list(database["Users"].find({"username": user["username"]})):
         return JSONResponse(status_code=409, content=create_message("User already exists"))
 
-    new_user = db.database["Users"].insert_one(user)
+    new_user = database["Users"].insert_one(user)
 
-    created_user = db.database["Users"].find_one({"_id": new_user.inserted_id})
+    created_user = database["Users"].find_one({"_id": new_user.inserted_id})
 
     return created_user

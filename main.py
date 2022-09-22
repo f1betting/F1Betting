@@ -3,8 +3,8 @@ import logging
 
 import uvicorn
 
-from internal.api import app as app_fastapi
 from internal.scheduler import app as app_rocketry
+from internal.api import app as app_fastapi
 
 
 class Server(uvicorn.Server):

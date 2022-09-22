@@ -7,7 +7,7 @@ class BettingDatabase:
     client: MongoClient
     database: Database
 
-    def __init__(self):
+    def connect(self):
         config = dotenv_values(".env")
 
         self.client = MongoClient(config["DB_URI"])
@@ -18,4 +18,6 @@ class BettingDatabase:
         self.client.close()
 
 
-db = BettingDatabase()
+database = BettingDatabase()
+database.connect()
+database = database.database
