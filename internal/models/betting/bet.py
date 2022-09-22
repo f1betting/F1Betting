@@ -2,13 +2,13 @@ from pydantic import BaseModel
 
 
 class BaseBet(BaseModel):
-    username: str
     p1: str
     p2: str
     p3: str
 
 
 class FullBet(BaseBet):
+    username: str
     season: int
     round: int
     points: int

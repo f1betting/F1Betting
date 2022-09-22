@@ -1,11 +1,13 @@
 import requests
 from dotenv import dotenv_values
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
+from internal.auth import decode_user
 from internal.database import database
 from internal.models.betting.bet import BetExample, BaseBet, FullBet
+from internal.models.betting.user import BaseUser
 from internal.models.general.message import Message, create_message
 
 config = dotenv_values(".env")
@@ -16,7 +18,7 @@ router = APIRouter(
 )
 
 
-@router.get("/{username}/{race}",
+@router.get("/{race}",
             response_model=FullBet,
             responses={
                 404: {"model": Message, "content": {
@@ -30,8 +32,8 @@ router = APIRouter(
                     }
                 }},
             })
-def get_bet(username: str, race: int):
-    user = database["Users"].find_one({"username": username.lower()})
+def get_bet(race: int, auth_user: BaseUser = Depends(decode_user)):
+    user = database["Users"].find_one({"username": auth_user.username})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
@@ -63,7 +65,7 @@ def get_bet(username: str, race: int):
                      }
                  }}
              })
-def create_bet(bet: BaseBet):
+def create_bet(bet: BaseBet, auth_user: BaseUser = Depends(decode_user)):
     ip = config["F1_API"]
 
     url = f"http://{ip}/event/next"
@@ -71,7 +73,6 @@ def create_bet(bet: BaseBet):
     res = requests.get(url)
     data = res.json()
 
-    bet.username = bet.username.lower()
     bet.p1 = bet.p1.upper()
     bet.p2 = bet.p2.upper()
     bet.p3 = bet.p3.upper()
@@ -97,8 +98,9 @@ def create_bet(bet: BaseBet):
     bet["season"] = data["season"]
     bet["round"] = data["round"]
     bet["points"] = 0
+    bet["username"] = auth_user.username
 
-    user = database["Users"].find_one({"username": bet["username"]})
+    user = database["Users"].find_one({"username": auth_user.username})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
@@ -114,7 +116,7 @@ def create_bet(bet: BaseBet):
     return created_bet
 
 
-@router.put("/{username}/{race}",
+@router.put("/{race}",
             response_model=Message,
             responses={
                 404: {"model": Message, "content": {
@@ -128,8 +130,8 @@ def create_bet(bet: BaseBet):
                     }
                 }},
             })
-def edit_bet(username: str, race: int, season: int, p1: str, p2: str, p3: str):
-    user = database["Users"].find_one({"username": username.lower()})
+def edit_bet(race: int, season: int, p1: str, p2: str, p3: str, auth_user: BaseUser = Depends(decode_user)):
+    user = database["Users"].find_one({"username": auth_user.username})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
@@ -163,7 +165,7 @@ def edit_bet(username: str, race: int, season: int, p1: str, p2: str, p3: str):
     return create_message("Bet updated successfully")
 
 
-@router.delete("/{username}/{race}",
+@router.delete("/{race}",
                response_model=Message,
                responses={
                    404: {"model": Message, "content": {
@@ -178,8 +180,8 @@ def edit_bet(username: str, race: int, season: int, p1: str, p2: str, p3: str):
                        }
                    }},
                })
-def delete_bet(username: str, race: int):
-    user = database["Users"].find_one({"username": username.lower()})
+def delete_bet(race: int, auth_user: BaseUser = Depends(decode_user)):
+    user = database["Users"].find_one({"username": auth_user.username})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
