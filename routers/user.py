@@ -41,7 +41,7 @@ def get_all_users():
     return {"users": users}
 
 
-@router.get("/{username}",
+@router.get("/{user_id}",
             response_model=FullUser,
             responses={
                 404: {"model": Message, "content": {
@@ -55,8 +55,8 @@ def get_all_users():
                     }
                 }}
             })
-def get_user_by_username(username: str):
-    user = database["Users"].find_one({"username": username})
+def get_user_by_id(user_id: str):
+    user = database["Users"].find_one({"uuid": user_id})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
@@ -88,7 +88,7 @@ def create_user(user: BaseUser):
     if not user["uuid"]:
         user["uuid"] = str(uuid.uuid4())
 
-    if list(database["Users"].find({"username": user["username"]})):
+    if list(database["Users"].find({"uuid": user["uuid"]})):
         return JSONResponse(status_code=409, content=create_message("User already exists"))
 
     new_user = database["Users"].insert_one(user)

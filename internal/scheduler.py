@@ -7,7 +7,7 @@ from internal.logic.results.get_points import get_points
 
 config = dotenv_values(".env")
 
-app = Rocketry()
+app = Rocketry(config={'task_execution': 'async'})
 
 
 @app.task("every 60 seconds")
@@ -37,20 +37,20 @@ def update_users():
             for bet in bets:
                 round_points = get_points(results["results"], bet)
 
-                database["Bets"].update_one({"username": bet["username"], "round": race}, {"$set": {
+                database["Bets"].update_one({"uuid": bet["uuid"], "round": race}, {"$set": {
                     "points": round_points
                 }})
 
     users = list(database["Users"].find({}, {"_id": False}).sort("points", -1))
 
     for user in users:
-        all_bets = list(database["Bets"].find({"username": user["username"], "season": season}))
+        all_bets = list(database["Bets"].find({"uuid": user["uuid"], "season": season}))
 
         all_points = 0
 
         for bet in all_bets:
             all_points += bet["points"]
 
-        database["Users"].update_one({"username": user["username"]}, {"$set": {
+        database["Users"].update_one({"uuid": user["uuid"]}, {"$set": {
             "points": all_points
         }})

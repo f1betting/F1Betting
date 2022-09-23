@@ -8,7 +8,7 @@ class BaseBet(BaseModel):
 
 
 class FullBet(BaseBet):
-    username: str
+    uuid: str
     season: int
     round: int
     points: int
@@ -19,7 +19,7 @@ class BetResults(BaseModel):
 
 
 BetExample = {
-    "username": "niek",
+    "uuid": "123712308762698123",
     "p1": "RUS",
     "p2": "LEC",
     "p3": "RUS",

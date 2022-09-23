@@ -3,8 +3,8 @@ import logging
 
 import uvicorn
 
-from internal.scheduler import app as app_rocketry
 from internal.api import app as app_fastapi
+from internal.scheduler import app as app_rocketry
 
 
 class Server(uvicorn.Server):
@@ -19,7 +19,7 @@ async def main():
     api = asyncio.create_task(server.serve())
     scheduler = asyncio.create_task(app_rocketry.serve())
 
-    await asyncio.wait([scheduler, api])
+    await scheduler, api
 
 
 if __name__ == "__main__":
