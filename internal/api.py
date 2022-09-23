@@ -22,7 +22,6 @@ app.add_middleware(CORSMiddleware,
                    allow_headers=["*"])
 
 
-
 # CUSTOMIZE OPENAPI
 # https://fastapi.tiangolo.com/advanced/extending-openapi/
 
