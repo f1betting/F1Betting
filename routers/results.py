@@ -1,12 +1,15 @@
 import requests
 from dotenv import dotenv_values
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
+from internal.auth import decode_user
 from internal.database import database
 from internal.logic.results.get_points import get_points
-from internal.models.betting.user_results import UserResults, UserResultExample
+from internal.models.betting.user import BaseUser
+from internal.models.betting.user_results import UserResults, UserResultExample, UserResult
 from internal.models.general.message import Message, create_message
+from routers.user import get_user_by_id
 
 config = dotenv_values(".env")
 
@@ -35,30 +38,16 @@ router = APIRouter(
                 }}
             })
 def get_all_results_for_round(season: int, race: int):
-    bets = list(database["Bets"].find({"round": race}))
-
-    if not bets:
-        return JSONResponse(status_code=404, content=create_message("Users not found"))
-
-    ip = config["F1_API"]
-
-    url = f"http://{ip}/results/race/{season}/{race}"
-    res = requests.get(url)
-    results = res.json()
-    results = results["results"]
-
-    for bet in bets:
-        round_points = get_points(results, bet)
-
-        database["Bets"].update_one({"username": bet["username"]}, {"$set": {
-            "points": round_points
-        }})
-
     bets = list(database["Bets"].find({"season": season, "round": race},
                                       {"_id": 0, "p1": 0, "p2": 0, "p3": 0, "season": 0, "round": 0}))
 
     if not bets:
         return JSONResponse(status_code=404, content=create_message("Bets not found"))
+
+    for bet in bets:
+        user = database["Users"].find_one({"uuid": bet["uuid"]})
+
+        bet["username"] = user["username"]
 
     return {"results": bets}
 
