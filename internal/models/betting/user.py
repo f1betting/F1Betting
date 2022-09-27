@@ -16,3 +16,9 @@ UserExample = {
     "username": "Niek",
     "uuid": uuid.uuid4(),
 }
+
+UserPointsExample = {
+    "username": "niek",
+    "uuid": uuid.uuid4(),
+    "points_2022": 19
+}
