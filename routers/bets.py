@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from internal.auth import decode_user
 from internal.database import database
 from internal.models.betting.bet import BetExample, BaseBet, FullBet
-from internal.models.betting.user import BaseUser
+from internal.models.betting.user import User
 from internal.models.general.message import Message, create_message
 
 config = dotenv_values(".env")
@@ -32,7 +32,7 @@ router = APIRouter(
                     }
                 }},
             })
-def get_bet(race: int, auth_user: BaseUser = Depends(decode_user)):
+def get_bet(race: int, auth_user: User = Depends(decode_user)):
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
@@ -65,7 +65,7 @@ def get_bet(race: int, auth_user: BaseUser = Depends(decode_user)):
                      }
                  }}
              })
-def create_bet(bet: BaseBet, auth_user: BaseUser = Depends(decode_user)):
+def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
     ip = config["F1_API"]
 
     url = f"http://{ip}/event/next"
@@ -130,7 +130,7 @@ def create_bet(bet: BaseBet, auth_user: BaseUser = Depends(decode_user)):
                     }
                 }},
             })
-def edit_bet(race: int, season: int, p1: str, p2: str, p3: str, auth_user: BaseUser = Depends(decode_user)):
+def edit_bet(race: int, season: int, p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
@@ -180,7 +180,7 @@ def edit_bet(race: int, season: int, p1: str, p2: str, p3: str, auth_user: BaseU
                        }
                    }},
                })
-def delete_bet(race: int, auth_user: BaseUser = Depends(decode_user)):
+def delete_bet(race: int, auth_user: User = Depends(decode_user)):
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:

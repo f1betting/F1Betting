@@ -14,43 +14,36 @@ app = Rocketry(config={'task_execution': 'async'})
 def update_users():
     ip = config["F1_API"]
 
-    event_url = f"http://{ip}/event/next"
-    event_res = requests.get(event_url)
-    event = event_res.json()
+    seasons = list(database["Bets"].find().distinct("season"))
 
-    season = event["season"]
+    for season in seasons:
+        races = list(database["Bets"].find({"season": season}).distinct("round"))
 
-    calendar_url = f"http://{ip}/calendar/{season}"
-    calendar_res = requests.get(calendar_url)
-    calendar = calendar_res.json()
+        for race in races:
+            bets = list(database["Bets"].find({"round": race}))
 
-    for round in calendar["events"]:
-        race = round["round"]
+            race_url = f"http://{ip}/results/race/{season}/{race}"
+            race_res = requests.get(race_url)
+            results = race_res.json()
 
-        bets = list(database["Bets"].find({"round": race}))
+            if "results" in results.keys():
+                for bet in bets:
+                    round_points = get_points(results["results"], bet)
 
-        race_url = f"http://{ip}/results/race/{season}/{race}"
-        race_res = requests.get(race_url)
-        results = race_res.json()
+                    database["Bets"].update_one({"uuid": bet["uuid"], "round": race}, {"$set": {
+                        "points": round_points
+                    }})
 
-        if "results" in results.keys():
-            for bet in bets:
-                round_points = get_points(results["results"], bet)
+        users = list(database["Users"].find({}, {"_id": False}).sort("points", -1))
 
-                database["Bets"].update_one({"uuid": bet["uuid"], "round": race}, {"$set": {
-                    "points": round_points
-                }})
+        for user in users:
+            all_bets = list(database["Bets"].find({"uuid": user["uuid"], "season": season}))
 
-    users = list(database["Users"].find({}, {"_id": False}).sort("points", -1))
+            all_points = 0
 
-    for user in users:
-        all_bets = list(database["Bets"].find({"uuid": user["uuid"], "season": season}))
+            for bet in all_bets:
+                all_points += bet["points"]
 
-        all_points = 0
-
-        for bet in all_bets:
-            all_points += bet["points"]
-
-        database["Users"].update_one({"uuid": user["uuid"]}, {"$set": {
-            "points": all_points
-        }})
+            database["Users"].update_one({"uuid": user["uuid"]}, {"$set": {
+                f"points_{season}": all_points
+            }})

@@ -3,25 +3,16 @@ import uuid
 from pydantic import BaseModel
 
 
-class BaseUser(BaseModel):
+class User(BaseModel):
     username: str
     uuid: str | None
 
 
-class FullUser(BaseUser):
-    points: int
-
-
 class Users(BaseModel):
-    users: list[FullUser]
+    users: list[User]
 
 
 UserExample = {
     "username": "Niek",
     "uuid": uuid.uuid4(),
-    "points": 0
-}
-
-UserCreateExample = {
-    "username": "Niek",
 }

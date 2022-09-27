@@ -5,7 +5,7 @@ from fastapi.security import HTTPBearer
 from google.auth.transport import requests
 from google.oauth2 import id_token
 
-from internal.models.betting.user import BaseUser
+from internal.models.betting.user import User
 
 # SETUP OAUTH2
 # https://auth0.com/blog/build-and-secure-fastapi-server-with-auth0/
@@ -20,7 +20,7 @@ def decode_token(token):
 
     user = id_token.verify_oauth2_token(token.credentials, request, audience=config["GOOGLE_ID"])
 
-    return BaseUser(username=user["name"].lower(), uuid=user["sub"])
+    return User(username=user["name"].lower(), uuid=user["sub"])
 
 
 def decode_user(token: jwt = Depends(token_auth_scheme)):

@@ -1,15 +1,10 @@
-import requests
 from dotenv import dotenv_values
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from internal.auth import decode_user
 from internal.database import database
-from internal.logic.results.get_points import get_points
-from internal.models.betting.user import BaseUser
-from internal.models.betting.user_results import UserResults, UserResultExample, UserResult
+from internal.models.betting.user_results import UserResults, UserResultExample
 from internal.models.general.message import Message, create_message
-from routers.user import get_user_by_id
 
 config = dotenv_values(".env")
 
@@ -52,7 +47,7 @@ def get_all_results_for_round(season: int, race: int):
     return {"results": bets}
 
 
-@router.get("/standings",
+@router.get("/standings/{season}",
             response_model=UserResults,
             responses={
                 404: {"model": Message, "content": {
@@ -70,10 +65,18 @@ def get_all_results_for_round(season: int, race: int):
                     }
                 }}
             })
-def get_standings():
-    users = list(database["Users"].find({}, {"_id": False, "uuid": False}).sort("points", -1))
+def get_standings(season: int):
+    users = list(database["Users"].find({}, {"_id": False, "uuid": False}).sort(f"points_{season}", -1))
+
+    seasons = list(database["Bets"].find().distinct("season"))
+
+    if season not in seasons:
+        return JSONResponse(status_code=404, content=create_message("Season not found"))
 
     if not users:
         return JSONResponse(status_code=404, content=create_message("Users not found"))
+
+    for user in users:
+        user["points"] = user[f"points_{season}"]
 
     return {"results": users}

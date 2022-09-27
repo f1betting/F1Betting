@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from fastapi.routing import APIRoute
 
-from routers import bets, user, results
+from routers import bets, user, results, season
 
 app = FastAPI()
 
@@ -11,6 +11,7 @@ app = FastAPI()
 app.include_router(user.router)
 app.include_router(bets.router)
 app.include_router(results.router)
+app.include_router(season.router)
 
 # Allow all origins
 origins = ["*"]

@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
 from internal.database import database
-from internal.models.betting.user import UserExample, BaseUser, FullUser, Users
+from internal.models.betting.user import UserExample, User, Users
 from internal.models.general.message import Message, create_message
 
 router = APIRouter(
@@ -42,14 +42,14 @@ def get_all_users():
 
 
 @router.get("/{user_id}",
-            response_model=FullUser,
+            response_model=User,
             responses={
                 404: {"model": Message, "content": {
                     "application/json": {
                         "example": create_message("User not found")
                     }
                 }},
-                200: {"model": FullUser, "content": {
+                200: {"model": User, "content": {
                     "application/json": {
                         "example": UserExample
                     }
@@ -65,25 +65,23 @@ def get_user_by_id(user_id: str):
 
 
 @router.post("/",
-             response_model=FullUser,
+             response_model=User,
              responses={
                  409: {"model": Message, "content": {
                      "application/json": {
                          "example": create_message("User already exists")
                      }
                  }},
-                 200: {"model": FullUser, "content": {
+                 200: {"model": User, "content": {
                      "application/json": {
                          "example": UserExample
                      }
                  }}
              })
-def create_user(user: BaseUser):
+def create_user(user: User):
     user.username = user.username.lower()
 
     user = jsonable_encoder(user)
-
-    user["points"] = 0
 
     if not user["uuid"]:
         user["uuid"] = str(uuid.uuid4())
