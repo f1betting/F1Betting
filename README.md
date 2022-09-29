@@ -10,6 +10,12 @@ Build image using
 $ docker build -t f1betting .
 ````
 
+Alternatively you can use the docker hub [repository](https://hub.docker.com/r/nieko3/f1betting) using:
+
+````shell
+$ docker pull nieko3/f1betting
+````
+
 Run container using:
 
 ````shell
