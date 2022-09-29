@@ -14,7 +14,7 @@ class Server(uvicorn.Server):
 
 
 async def main():
-    server = Server(config=uvicorn.Config(app_fastapi, workers=1, loop="asyncio", port=8001))
+    server = Server(config=uvicorn.Config(app_fastapi, workers=1, loop="asyncio", port=80, host="0.0.0.0"))
 
     api = asyncio.create_task(server.serve())
     scheduler = asyncio.create_task(app_rocketry.serve())

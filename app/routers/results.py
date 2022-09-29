@@ -1,12 +1,9 @@
-from dotenv import dotenv_values
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from internal.database import database
-from internal.models.betting.user_results import UserResults, UserResultExample
-from internal.models.general.message import Message, create_message
-
-config = dotenv_values(".env")
+from app.internal.database import database
+from app.internal.models.betting.user_results import UserResults, UserResultExample
+from app.internal.models.general.message import Message, create_message
 
 router = APIRouter(
     prefix="/results",

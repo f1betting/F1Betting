@@ -1,12 +1,9 @@
-from dotenv import dotenv_values
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from internal.database import database
-from internal.models.betting.season import Seasons
-from internal.models.general.message import Message, create_message
-
-config = dotenv_values(".env")
+from app.internal.database import database
+from app.internal.models.betting.season import Seasons
+from app.internal.models.general.message import Message, create_message
 
 router = APIRouter(
     tags=["Seasons"],

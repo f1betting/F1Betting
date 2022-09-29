@@ -1,18 +1,17 @@
+import os
+
 import requests
-from dotenv import dotenv_values
 from rocketry import Rocketry
 
-from internal.database import database
-from internal.logic.results.get_points import get_points
-
-config = dotenv_values(".env")
+from app.internal.database import database
+from app.internal.logic.results.get_points import get_points
 
 app = Rocketry(config={'task_execution': 'async'})
 
 
 @app.task("every 60 seconds")
 def update_users():
-    ip = config["F1_API"]
+    ip = os.getenv("F1_API")
 
     seasons = list(database["Bets"].find().distinct("season"))
 

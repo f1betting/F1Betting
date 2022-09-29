@@ -1,16 +1,15 @@
+import os
+
 import requests
-from dotenv import dotenv_values
 from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from internal.auth import decode_user
-from internal.database import database
-from internal.models.betting.bet import BetExample, BaseBet, FullBet
-from internal.models.betting.user import User
-from internal.models.general.message import Message, create_message
-
-config = dotenv_values(".env")
+from app.internal.auth import decode_user
+from app.internal.database import database
+from app.internal.models.betting.bet import BetExample, BaseBet, FullBet
+from app.internal.models.betting.user import User
+from app.internal.models.general.message import Message, create_message
 
 router = APIRouter(
     prefix="/bet",
@@ -66,7 +65,7 @@ def get_bet(race: int, auth_user: User = Depends(decode_user)):
                  }}
              })
 def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
-    ip = config["F1_API"]
+    ip = os.getenv("F1_API")
 
     url = f"http://{ip}/event/next"
 
@@ -141,7 +140,7 @@ def edit_bet(race: int, season: int, p1: str, p2: str, p3: str, auth_user: User 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))
 
-    ip = config["F1_API"]
+    ip = os.getenv("F1_API")
 
     drivers_url = f"http://{ip}/drivers/{season}"
     drivers_res = requests.get(drivers_url)
