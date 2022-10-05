@@ -1,7 +1,10 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from fastapi.routing import APIRoute
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from app.routers import bets, results, user, season
 
@@ -21,6 +24,11 @@ app.add_middleware(CORSMiddleware,
                    allow_credentials=True,
                    allow_methods=["*"],
                    allow_headers=["*"])
+
+# Allow only specific hosts
+
+if os.getenv("ALLOWED_HOSTS"):
+    app.add_middleware(TrustedHostMiddleware, allowed_hosts=os.getenv("ALLOWED_HOSTS").split("|"))
 
 
 # CUSTOMIZE OPENAPI
