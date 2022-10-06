@@ -9,12 +9,11 @@ from app.internal.models.betting.user import UserExample, User, Users, UserPoint
 from app.internal.models.general.message import Message, create_message
 
 router = APIRouter(
-    prefix="/users",
     tags=["Users"],
 )
 
 
-@router.get("/",
+@router.get("/users",
             response_model=Users,
             responses={
                 404: {"model": Message, "content": {
@@ -41,7 +40,7 @@ def get_all_users():
     return {"users": users}
 
 
-@router.get("/{user_id}",
+@router.get("/users/{user_id}",
             responses={
                 404: {"model": Message, "content": {
                     "application/json": {
@@ -63,7 +62,7 @@ def get_user_by_id(user_id: str):
     return user
 
 
-@router.post("/",
+@router.post("/users",
              response_model=User,
              responses={
                  409: {"model": Message, "content": {

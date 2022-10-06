@@ -12,12 +12,11 @@ from app.internal.models.betting.user import User
 from app.internal.models.general.message import Message, create_message
 
 router = APIRouter(
-    prefix="/bet",
     tags=["Bet"],
 )
 
 
-@router.get("/{race}",
+@router.get("/bet/{season}/{race}",
             response_model=FullBet,
             responses={
                 404: {"model": Message, "content": {
@@ -31,13 +30,13 @@ router = APIRouter(
                     }
                 }},
             })
-def get_bet(race: int, auth_user: User = Depends(decode_user)):
+def get_bet(season: int, race: int, auth_user: User = Depends(decode_user)):
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    bet = database["Bets"].find_one({"uuid": user["uuid"], "round": race})
+    bet = database["Bets"].find_one({"uuid": user["uuid"], "season": season, "round": race})
 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))
@@ -45,7 +44,7 @@ def get_bet(race: int, auth_user: User = Depends(decode_user)):
     return bet
 
 
-@router.post("/",
+@router.post("/bet",
              response_model=FullBet,
              responses={
                  404: {"model": Message, "content": {
@@ -115,7 +114,7 @@ def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
     return created_bet
 
 
-@router.put("/{race}",
+@router.put("/bet",
             response_model=Message,
             responses={
                 404: {"model": Message, "content": {
@@ -129,20 +128,27 @@ def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
                     }
                 }},
             })
-def edit_bet(race: int, season: int, p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
+def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    bet = database["Bets"].find_one({"uuid": user["uuid"], "round": race, "season": season})
+    ip = os.getenv("F1_API")
+
+    url = f"http://{ip}/event/next"
+
+    res = requests.get(url)
+    data = res.json()
+
+    bet = database["Bets"].find_one({"uuid": user["uuid"], "season": data["season"], "round": data["round"]})
 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))
 
     ip = os.getenv("F1_API")
 
-    drivers_url = f"http://{ip}/drivers/{season}"
+    drivers_url = f"http://{ip}/drivers/{data['season']}"
     drivers_res = requests.get(drivers_url)
     drivers_data = drivers_res.json()
     drivers = drivers_data["drivers"]
@@ -164,7 +170,7 @@ def edit_bet(race: int, season: int, p1: str, p2: str, p3: str, auth_user: User 
     return create_message("Bet updated successfully")
 
 
-@router.delete("/{race}",
+@router.delete("/bet",
                response_model=Message,
                responses={
                    404: {"model": Message, "content": {
@@ -179,13 +185,20 @@ def edit_bet(race: int, season: int, p1: str, p2: str, p3: str, auth_user: User 
                        }
                    }},
                })
-def delete_bet(race: int, auth_user: User = Depends(decode_user)):
+def delete_bet(auth_user: User = Depends(decode_user)):
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    bet = database["Bets"].find_one({"uuid": user["uuid"], "round": race})
+    ip = os.getenv("F1_API")
+
+    url = f"http://{ip}/event/next"
+
+    res = requests.get(url)
+    data = res.json()
+
+    bet = database["Bets"].find_one({"uuid": user["uuid"], "season": data["season"], "round": data["round"]})
 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))

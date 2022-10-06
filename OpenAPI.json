@@ -13,7 +13,7 @@
     }
   },
   "paths": {
-    "/users/": {
+    "/users": {
       "get": {
         "tags": [
           "Users"
@@ -32,7 +32,7 @@
                   "users": [
                     {
                       "username": "Niek",
-                      "uuid": "921bc401-cbb3-49d5-80e5-bb95cdc34f28"
+                      "uuid": "e2a9206c-320e-4a96-bce2-57538ac6de13"
                     }
                   ]
                 }
@@ -80,7 +80,7 @@
                 },
                 "example": {
                   "username": "Niek",
-                  "uuid": "921bc401-cbb3-49d5-80e5-bb95cdc34f28"
+                  "uuid": "e2a9206c-320e-4a96-bce2-57538ac6de13"
                 }
               }
             }
@@ -139,7 +139,7 @@
                 },
                 "example": {
                   "username": "niek",
-                  "uuid": "5849ded4-d7c8-491f-9cac-96fbeabdfa6b",
+                  "uuid": "67435090-eea4-4fac-b1a8-4292d9391f2f",
                   "points_2022": 19
                 }
               }
@@ -171,7 +171,7 @@
         }
       }
     },
-    "/bet/{race}": {
+    "/bet/{season}/{race}": {
       "get": {
         "tags": [
           "Bet"
@@ -179,6 +179,15 @@
         "summary": "Get Bet",
         "operationId": "get_bet",
         "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Season",
+              "type": "integer"
+            },
+            "name": "season",
+            "in": "path"
+          },
           {
             "required": true,
             "schema": {
@@ -238,7 +247,9 @@
             "HTTPBearer": []
           }
         ]
-      },
+      }
+    },
+    "/bet": {
       "put": {
         "tags": [
           "Bet"
@@ -246,24 +257,6 @@
         "summary": "Edit Bet",
         "operationId": "edit_bet",
         "parameters": [
-          {
-            "required": true,
-            "schema": {
-              "title": "Race",
-              "type": "integer"
-            },
-            "name": "race",
-            "in": "path"
-          },
-          {
-            "required": true,
-            "schema": {
-              "title": "Season",
-              "type": "integer"
-            },
-            "name": "season",
-            "in": "query"
-          },
           {
             "required": true,
             "schema": {
@@ -336,69 +329,6 @@
           }
         ]
       },
-      "delete": {
-        "tags": [
-          "Bet"
-        ],
-        "summary": "Delete Bet",
-        "operationId": "delete_bet",
-        "parameters": [
-          {
-            "required": true,
-            "schema": {
-              "title": "Race",
-              "type": "integer"
-            },
-            "name": "race",
-            "in": "path"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                },
-                "example": {
-                  "message": "Bet deleted successfully"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                },
-                "example": {
-                  "message": "User not found"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      }
-    },
-    "/bet/": {
       "post": {
         "tags": [
           "Bet"
@@ -467,6 +397,46 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Bet"
+        ],
+        "summary": "Delete Bet",
+        "operationId": "delete_bet",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                },
+                "example": {
+                  "message": "Bet deleted successfully"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                },
+                "example": {
+                  "message": "User not found"
                 }
               }
             }
