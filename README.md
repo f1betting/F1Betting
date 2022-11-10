@@ -79,13 +79,13 @@ GOOGLE_ID=
 1. You can use the docker image from the DockerHub [repository](https://hub.docker.com/r/nieko3/f1betting) using:
 
    ````shell
-   $ docker pull nieko3/f1betting:v1.2.0
+   $ docker pull nieko3/f1betting:v1.2.1
    ````
 
 2. Run container using:
 
     ````shell
-    $ docker run --env-file ./.env -d --name f1betting -p 8001:80 f1betting:v1.2.0
+    $ docker run --env-file ./.env -d --name f1betting -p 8001:80 f1betting:v1.2.1
     ````
 
 ### 🏡 Running locally
