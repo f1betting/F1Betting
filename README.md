@@ -90,15 +90,15 @@ GOOGLE_ID=
 
 ### 🏡 Running locally
 
-1. Install depedencies using pip
+1. Install depedencies using pip:
 
    ````shell
    $ pip install -r requirements.txt
    ````
 
-2. Use ``uvicorn`` to host the local development server
+2. Run main.py to start the API using:
    ````shell
-   $ uvicorn app.main:app --reload --port 8000
+   $ python main.py
    ````
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
