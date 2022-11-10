@@ -90,7 +90,7 @@ GOOGLE_ID=
 
 ### 🏡 Running locally
 
-1. Install depedencies using pip:
+1. Install depedencies with pip using:
 
    ````shell
    $ pip install -r requirements.txt
