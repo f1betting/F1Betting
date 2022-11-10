@@ -7,6 +7,7 @@ from internal.api import app as app_fastapi
 from internal.scheduler import app as app_rocketry
 
 
+# Uvicorn Server class
 class Server(uvicorn.Server):
     def handle_exit(self, sig: int, frame) -> None:
         app_rocketry.session.shut_down()
@@ -14,16 +15,21 @@ class Server(uvicorn.Server):
 
 
 async def main():
+    # Setup uvicorn server
     server = Server(config=uvicorn.Config(app_fastapi, workers=1, loop="asyncio", port=80, host="0.0.0.0"))
 
+    # Create tasks
     api = asyncio.create_task(server.serve())
     scheduler = asyncio.create_task(app_rocketry.serve())
 
+    # Execute tasks
     await scheduler, api
 
 
 if __name__ == "__main__":
+    # Add logger
     logger = logging.getLogger("rocketry.task")
     logger.addHandler(logging.StreamHandler())
 
+    # Run tasks
     asyncio.run(main())

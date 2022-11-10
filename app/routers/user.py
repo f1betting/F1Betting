@@ -54,6 +54,7 @@ def get_all_users():
                 }}
             })
 def get_user_by_id(user_id: str):
+    # Fetch user
     user = database["Users"].find_one({"uuid": user_id}, {"_id": 0})
 
     if not user:
@@ -77,18 +78,23 @@ def get_user_by_id(user_id: str):
                  }}
              })
 def create_user(user: User):
+    # Convert username to lowercase for consistency
     user.username = user.username.lower()
 
     user = jsonable_encoder(user)
 
+    # Generate UUID if not provided
     if not user["uuid"]:
         user["uuid"] = str(uuid.uuid4())
 
+    # Check if UUID already exists
     if list(database["Users"].find({"uuid": user["uuid"]})):
         return JSONResponse(status_code=409, content=create_message("User already exists"))
 
+    # Create new user
     new_user = database["Users"].insert_one(user)
 
+    # Return created user
     created_user = database["Users"].find_one({"_id": new_user.inserted_id})
 
     return created_user

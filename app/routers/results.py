@@ -30,12 +30,14 @@ router = APIRouter(
                 }}
             })
 def get_all_results_for_round(season: int, race: int):
+    # Fetch bets
     bets = list(database["Bets"].find({"season": season, "round": race},
                                       {"_id": 0, "p1": 0, "p2": 0, "p3": 0, "season": 0, "round": 0}))
 
     if not bets:
         return JSONResponse(status_code=404, content=create_message("Bets not found"))
 
+    # Add username to bet
     for bet in bets:
         user = database["Users"].find_one({"uuid": bet["uuid"]})
 
@@ -63,8 +65,10 @@ def get_all_results_for_round(season: int, race: int):
                 }}
             })
 def get_standings(season: int):
+    # Fetch users
     users = list(database["Users"].find({}, {"_id": False, "uuid": False}).sort(f"points_{season}", -1))
 
+    # Fetch unique seasons
     seasons = list(database["Bets"].find().distinct("season"))
 
     if season not in seasons:
@@ -73,6 +77,7 @@ def get_standings(season: int):
     if not users:
         return JSONResponse(status_code=404, content=create_message("Users not found"))
 
+    # List points per user for the selected season
     for user in users:
         user["points"] = user[f"points_{season}"]
 

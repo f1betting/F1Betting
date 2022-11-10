@@ -31,16 +31,19 @@ router = APIRouter(
                 }},
             })
 def get_bet(season: int, race: int, auth_user: User = Depends(decode_user)):
+    # Fetch user
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
+    # Fetch bet
     bet = database["Bets"].find_one({"uuid": user["uuid"], "season": season, "round": race})
 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))
 
+    # Return bet
     return bet
 
 
@@ -66,49 +69,60 @@ def get_bet(season: int, race: int, auth_user: User = Depends(decode_user)):
 def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
     ip = os.getenv("F1_API")
 
+    # Fetch next event
     url = f"http://{ip}/event/next"
 
     res = requests.get(url)
     data = res.json()
 
+    # Capitalize driver abbreviation codes for consistency
     bet.p1 = bet.p1.upper()
     bet.p2 = bet.p2.upper()
     bet.p3 = bet.p3.upper()
 
+    # Check for duplicates
     if bet.p1 == bet.p2 or bet.p2 == bet.p3 or bet.p1 == bet.p3:
         return JSONResponse(status_code=409, content=create_message("Duplicate drivers"))
 
     bet = jsonable_encoder(bet)
 
+    # Fetch drivers
     drivers_url = f"http://{ip}/drivers/{data['season']}"
     drivers_res = requests.get(drivers_url)
     drivers_data = drivers_res.json()
     drivers = drivers_data["drivers"]
 
+    # Create array of driver abbreviation codes
     driver_codes = []
 
     for driver in drivers:
         driver_codes.append(driver["code"])
 
+    # Check for invalid codes in bet
     if not bet["p1"] in driver_codes or not bet["p2"] in driver_codes or not bet["p3"] in driver_codes:
         return JSONResponse(status_code=404, content=create_message("Driver not found"))
 
+    # Generate full bet data
     bet["season"] = data["season"]
     bet["round"] = data["round"]
     bet["points"] = 0
     bet["uuid"] = auth_user.uuid
 
+    # Fetch user
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
+    # Check if user already has made a bet
     if list(database["Bets"].find(
             {"uuid": user["uuid"], "season": bet["season"], "round": bet["round"]})):
         return JSONResponse(status_code=409, content=create_message("Bet already exists"))
 
+    # Add bet to database
     new_bet = database["Bets"].insert_one(bet)
 
+    # Return bet to user
     created_bet = database["Bets"].find_one({"_id": new_bet.inserted_id})
 
     return created_bet
@@ -136,11 +150,13 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
 
     ip = os.getenv("F1_API")
 
+    # Fetch next event
     url = f"http://{ip}/event/next"
 
     res = requests.get(url)
     data = res.json()
 
+    # Fetch existing bet
     bet = database["Bets"].find_one({"uuid": user["uuid"], "season": data["season"], "round": data["round"]})
 
     if not bet:
@@ -148,19 +164,23 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
 
     ip = os.getenv("F1_API")
 
+    # Fetch drivers
     drivers_url = f"http://{ip}/drivers/{data['season']}"
     drivers_res = requests.get(drivers_url)
     drivers_data = drivers_res.json()
     drivers = drivers_data["drivers"]
 
+    # Create array of driver abbreviation codes
     driver_codes = []
 
     for driver in drivers:
         driver_codes.append(driver["code"])
 
+    # Check for invalid codes
     if not p1.upper() in driver_codes or not p2.upper() in driver_codes or not p3.upper() in driver_codes:
         return JSONResponse(status_code=404, content=create_message("Driver not found"))
 
+    # Update bet
     database["Bets"].update_one({"_id": bet["_id"]}, {"$set": {
         "p1": p1.upper(),
         "p2": p2.upper(),
@@ -186,6 +206,7 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
                    }},
                })
 def delete_bet(auth_user: User = Depends(decode_user)):
+    # Fetch user
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
@@ -193,16 +214,19 @@ def delete_bet(auth_user: User = Depends(decode_user)):
 
     ip = os.getenv("F1_API")
 
+    # Fetch next event
     url = f"http://{ip}/event/next"
 
     res = requests.get(url)
     data = res.json()
 
+    # Find bet
     bet = database["Bets"].find_one({"uuid": user["uuid"], "season": data["season"], "round": data["round"]})
 
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))
 
+    # Delete bet
     database["Bets"].delete_one({"_id": bet["_id"]})
 
     return create_message("Bet deleted successfully")

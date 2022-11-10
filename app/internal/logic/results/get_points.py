@@ -1,3 +1,14 @@
+#################
+# POINTS SYSTEM #
+#################
+#  IF  GUESSED  #
+#   CORRECTLY   #
+#################
+#   P1  # +3pts #
+#   P2  # +2pts #
+#   P3  # +1pts #
+#################
+
 def get_points(results, bet):
     round_points = 0
 
