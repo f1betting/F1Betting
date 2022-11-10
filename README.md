@@ -6,9 +6,9 @@
   <p align="center">
     An API to do bets with your friends about F1 race results!
     <br />
-    <a href="https://github.com/niek-o/F1Betting/issues">Report Bug</a>
+    <a href="https://github.com/f1betting/F1Betting/issues">Report Bug</a>
     ·
-    <a href="https://github.com/niek-o/F1Betting/issues">Request Feature</a>
+    <a href="https://github.com/f1betting/F1Betting/issues">Request Feature</a>
   </p>
 </div>
 
@@ -21,6 +21,7 @@
 - [ℹ️ About The Project](#-about-the-project)
     - [🚧 Built With](#built-with)
 - [🔨 Getting Started](#-getting-started)
+    - [⚠ Prerequisites](#-prerequisites)
     - [🤖 .env file](#-env-file)
     - [🚢 Running using Docker](#running-using-docker)
     - [🏡 Running locally](#running-locally)
@@ -32,11 +33,6 @@
 ## ℹ️ About The Project
 
 An API to do bets with your friends about F1 race results!
-
-The API uses Google's OAuth2 tokens to handle users, so a Google project Client ID is required.
-
-This project was made to use with [F1API](https://github.com/niek-o/F1API) as part of research for my
-internship.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -55,6 +51,11 @@ internship.
 ## 🔨 Getting Started
 
 Below are the instructions for running the API for development and general usage.
+
+### ⚠ Prerequisites
+
+* [F1API](https://github.com/f1betting/F1API) must be running
+* A Google Cloud project with OAuth2 credentials configured
 
 ### 🤖 .env file
 
@@ -113,7 +114,7 @@ A swagger browser is included at the ``/docs`` endpoint. Alternatively you can u
 to use redoc.
 
 _For the OpenAPI specification, please refer
-to [OpenAPI.json](https://github.com/niek-o/F1Betting/blob/main/OpenAPI.json)_
+to [OpenAPI.json](https://github.com/f1betting/F1Betting/blob/main/OpenAPI.json)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
