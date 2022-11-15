@@ -67,10 +67,10 @@ def get_bet(season: int, race: int, auth_user: User = Depends(decode_user)):
                  }}
              })
 def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
-    ip = os.getenv("F1_API")
+    host = os.getenv("F1_API")
 
     # Fetch next event
-    url = f"http://{ip}/event/next"
+    url = f"{host}/event/next"
 
     res = requests.get(url)
     data = res.json()
@@ -87,7 +87,7 @@ def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
     bet = jsonable_encoder(bet)
 
     # Fetch drivers
-    drivers_url = f"http://{ip}/drivers/{data['season']}"
+    drivers_url = f"{host}/drivers/{data['season']}"
     drivers_res = requests.get(drivers_url)
     drivers_data = drivers_res.json()
     drivers = drivers_data["drivers"]
@@ -148,10 +148,10 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    ip = os.getenv("F1_API")
+    host = os.getenv("F1_API")
 
     # Fetch next event
-    url = f"http://{ip}/event/next"
+    url = f"{host}/event/next"
 
     res = requests.get(url)
     data = res.json()
@@ -162,10 +162,10 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
     if not bet:
         return JSONResponse(status_code=404, content=create_message("Bet not found"))
 
-    ip = os.getenv("F1_API")
+    host = os.getenv("F1_API")
 
     # Fetch drivers
-    drivers_url = f"http://{ip}/drivers/{data['season']}"
+    drivers_url = f"{host}/drivers/{data['season']}"
     drivers_res = requests.get(drivers_url)
     drivers_data = drivers_res.json()
     drivers = drivers_data["drivers"]
@@ -212,10 +212,10 @@ def delete_bet(auth_user: User = Depends(decode_user)):
     if not user:
         return JSONResponse(status_code=404, content=create_message("User not found"))
 
-    ip = os.getenv("F1_API")
+    host = os.getenv("F1_API")
 
     # Fetch next event
-    url = f"http://{ip}/event/next"
+    url = f"{host}/event/next"
 
     res = requests.get(url)
     data = res.json()

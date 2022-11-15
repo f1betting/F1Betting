@@ -13,7 +13,7 @@ app = Rocketry(config={'task_execution': 'async'})
 
 @app.task("every 1 hours")
 def update_users():
-    ip = os.getenv("F1_API")
+    host = os.getenv("F1_API")
 
     # Fetch every season the user has placed a bet for
     seasons = list(database["Bets"].find().distinct("season"))
@@ -27,7 +27,7 @@ def update_users():
             bets = list(database["Bets"].find({"round": race}))
 
             # Fetch the race results
-            race_url = f"http://{ip}/results/race/{season}/{race}"
+            race_url = f"{host}/results/race/{season}/{race}"
             race_res = requests.get(race_url)
             results = race_res.json()
 
