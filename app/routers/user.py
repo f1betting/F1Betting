@@ -99,10 +99,3 @@ def create_user(user: User):
     created_user = database["Users"].find_one({"_id": new_user.inserted_id})
 
     return created_user
-
-
-@router.put("/users/update")
-def update_all_users():
-    update_users()
-
-    return create_message("Updated successfully")

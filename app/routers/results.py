@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from app.internal.database import database
 from app.internal.models.betting.user_results import UserResults, UserResultExample
 from app.internal.models.general.message import Message, create_message
+from app.internal.scheduler import update_users
 
 router = APIRouter(
     prefix="/results",
@@ -65,6 +66,9 @@ def get_all_results_for_round(season: int, race: int):
                 }}
             })
 def get_standings(season: int):
+    # Update standings
+    update_users()
+
     # Fetch users
     users = list(database["Users"].find({}, {"_id": False, "uuid": False}).sort(f"points_{season}", -1))
 
