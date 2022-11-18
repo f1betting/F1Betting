@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 from app.internal.database import database
 from app.internal.models.betting.user import UserExample, User, Users, UserPointsExample
 from app.internal.models.general.message import Message, create_message
+from app.internal.scheduler import update_users
 
 router = APIRouter(
     tags=["Users"],
@@ -98,3 +99,8 @@ def create_user(user: User):
     created_user = database["Users"].find_one({"_id": new_user.inserted_id})
 
     return created_user
+
+
+@router.put("/users/update")
+def update_all_users():
+    update_users()
