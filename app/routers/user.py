@@ -104,3 +104,5 @@ def create_user(user: User):
 @router.put("/users/update")
 def update_all_users():
     update_users()
+
+    return create_message("Updated successfully")
