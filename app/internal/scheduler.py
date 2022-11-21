@@ -1,6 +1,7 @@
 import os
 
 import requests
+from requests import JSONDecodeError
 from rocketry import Rocketry
 
 from app.internal.database import database
@@ -26,20 +27,23 @@ def update_users():
             # Fetch the bet of the race
             bets = list(database["Bets"].find({"round": race}))
 
-            # Fetch the race results
-            race_url = f"{host}/results/race/{season}/{race}"
-            race_res = requests.get(race_url)
-            results = race_res.json()
+            try:
+                # Fetch the race results
+                race_url = f"{host}/results/race/{season}/{race}"
+                race_res = requests.get(race_url)
+                results = race_res.json()
 
-            if "results" in results.keys():
-                for bet in bets:
-                    # Calculate the amount points for the bet
-                    round_points = get_points(results["results"], bet)
+                if "results" in results.keys():
+                    for bet in bets:
+                        # Calculate the amount points for the bet
+                        round_points = get_points(results["results"], bet)
 
-                    # Update amount of points for the bet
-                    database["Bets"].update_one({"uuid": bet["uuid"], "round": race}, {"$set": {
-                        "points": round_points
-                    }})
+                        # Update amount of points for the bet
+                        database["Bets"].update_one({"uuid": bet["uuid"], "round": race}, {"$set": {
+                            "points": round_points
+                        }})
+            except JSONDecodeError:
+                print("Something went wrong with fetching the race results")
 
         # Fetch all users
         users = list(database["Users"].find({}, {"_id": False}).sort("points", -1))
