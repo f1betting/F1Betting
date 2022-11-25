@@ -1,35 +1,72 @@
-import asyncio
-import logging
+import os
 
-import uvicorn
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
+from fastapi.routing import APIRoute
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
-from internal.api import app as app_fastapi
-from internal.scheduler import app as app_rocketry
+from app.routers import bets, results, user, season
+
+app = FastAPI()
+
+# Include routers
+app.include_router(user.router)
+app.include_router(bets.router)
+app.include_router(results.router)
+app.include_router(season.router)
+
+# Allow all origins
+origins = ["*"]
+
+app.add_middleware(CORSMiddleware,
+                   allow_origins=origins,
+                   allow_credentials=True,
+                   allow_methods=["*"],
+                   allow_headers=["*"])
+
+# Allow only specific hosts
+
+if os.getenv("ALLOWED_HOSTS"):
+    app.add_middleware(TrustedHostMiddleware, allowed_hosts=os.getenv("ALLOWED_HOSTS").split("|"))
 
 
-# Uvicorn Server class
-class Server(uvicorn.Server):
-    def handle_exit(self, sig: int, frame) -> None:
-        app_rocketry.session.shut_down()
-        return super().handle_exit(sig, frame)
+# CUSTOMIZE OPENAPI
+# https://fastapi.tiangolo.com/advanced/extending-openapi/
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+
+    openapi_schema = get_openapi(
+        title="F1 BETTING",
+        version="1.0.0",
+        description="An API to do bets with your friends about F1 race results!",
+        license_info={
+            "name": "MIT",
+            "url": "https://github.com/niek-o/F1Betting/blob/main/LICENSE.md"
+        },
+        routes=app.routes,
+    )
+
+    openapi_schema["info"]["x-logo"] = {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/f/f2/New_era_F1_logo.png"
+    }
+
+    app.openapi_schema = openapi_schema
+
+    return app.openapi_schema
 
 
-async def main():
-    # Setup uvicorn server
-    server = Server(config=uvicorn.Config(app_fastapi, workers=1, loop="asyncio", port=80, host="0.0.0.0"))
+# SET FUNCTION NAME AS OPERATION ID
+# https://fastapi.tiangolo.com/advanced/path-operation-advanced-configuration/#using-the-path-operation-function-name-as-the-operationid
 
-    # Create tasks
-    api = asyncio.create_task(server.serve())
-    scheduler = asyncio.create_task(app_rocketry.serve())
-
-    # Execute tasks
-    await scheduler, api
+def function_name_as_operation_id(fast_api: FastAPI):
+    for route in fast_api.routes:
+        if isinstance(route, APIRoute):
+            route.operation_id = route.name
 
 
-if __name__ == "__main__":
-    # Add logger
-    logger = logging.getLogger("rocketry.task")
-    logger.addHandler(logging.StreamHandler())
+function_name_as_operation_id(app)
 
-    # Run tasks
-    asyncio.run(main())
+app.openapi = custom_openapi

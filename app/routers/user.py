@@ -7,7 +7,6 @@ from fastapi.responses import JSONResponse
 from app.internal.database import database
 from app.internal.models.betting.user import UserExample, User, Users, UserPointsExample
 from app.internal.models.general.message import Message, create_message
-from app.internal.scheduler import update_users
 
 router = APIRouter(
     tags=["Users"],

@@ -2,17 +2,11 @@ import os
 
 import requests
 from requests import JSONDecodeError
-from rocketry import Rocketry
 
 from app.internal.database import database
 from app.internal.logic.results.get_points import get_points
 
-app = Rocketry(config={'task_execution': 'async'})
 
-
-# This task updates the points for every user every hour.
-
-@app.task("every 1 hours")
 def update_users():
     host = os.getenv("F1_API")
 

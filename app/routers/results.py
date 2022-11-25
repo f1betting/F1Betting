@@ -2,9 +2,9 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 from app.internal.database import database
+from app.internal.logic.results.update_users import update_users
 from app.internal.models.betting.user_results import UserResults, UserResultExample
 from app.internal.models.general.message import Message, create_message
-from app.internal.scheduler import update_users
 
 router = APIRouter(
     prefix="/results",
