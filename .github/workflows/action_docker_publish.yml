@@ -1,9 +1,4 @@
-name: Docker Build and Push
-
-on:
-  push:
-    tags:
-      - 'v*.*.*'
+on: workflow_call
 
 jobs:
   build:
@@ -16,16 +11,15 @@ jobs:
           echo "RELEASE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
 
       - name: Docker Login
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
         run: |
           docker build -t ${{ secrets.DOCKER_USER }}/f1betting:$RELEASE_VERSION .
+          docker build -t ${{ secrets.DOCKER_USER }}/f1betting:latest .
 
       - name: Docker Push
         run: |
           docker push ${{ secrets.DOCKER_USER }}/f1betting:$RELEASE_VERSION
+          docker push ${{ secrets.DOCKER_USER }}/f1betting:latest
