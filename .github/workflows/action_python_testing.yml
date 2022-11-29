@@ -27,8 +27,8 @@ jobs:
         with:
           coverageFile: coverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-          thresholdAll: 0.8
-          thresholdNew: 0.9
+          thresholdAll: 0.0
+          thresholdNew: 0.0
           thresholdModified: 0 # looks at all modified lines not only the python files
       - uses: actions/upload-artifact@v3
         with:
