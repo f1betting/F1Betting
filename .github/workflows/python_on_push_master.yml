@@ -3,12 +3,19 @@ name: Python on Push Master
 on:
   push:
     branches:
-      - master
+      - main
 
 
 jobs:
   testing:
     uses: ./.github/workflows/action_python_testing.yml
+
+  sonar:
+    uses: ./.github/workflows/action_sonarcloud.yml
+    needs: [ testing ]
+    secrets:
+      github: ${{ secrets.GITHUB_TOKEN }}
+      sonar: ${{ secrets.SONAR_TOKEN }}
 
 #  deploy:
 #    runs-on: ubuntu-latest
