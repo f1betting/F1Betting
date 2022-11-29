@@ -11,7 +11,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "max_verstappen",
-                    "url": "http://en.wikipedia.org/wiki/Max_Verstappen",
+                    "url": "https://en.wikipedia.org/wiki/Max_Verstappen",
                     "givenName": "Max",
                     "familyName": "Verstappen",
                     "dateOfBirth": "1997-09-30",
@@ -22,7 +22,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "red_bull",
-                    "url": "http://en.wikipedia.org/wiki/Red_Bull_Racing",
+                    "url": "https://en.wikipedia.org/wiki/Red_Bull_Racing",
                     "name": "Red Bull",
                     "nationality": "Austrian"
                 },
@@ -55,7 +55,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "leclerc",
-                    "url": "http://en.wikipedia.org/wiki/Charles_Leclerc",
+                    "url": "https://en.wikipedia.org/wiki/Charles_Leclerc",
                     "givenName": "Charles",
                     "familyName": "Leclerc",
                     "dateOfBirth": "1997-10-16",
@@ -66,7 +66,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "ferrari",
-                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                    "url": "https://en.wikipedia.org/wiki/Scuderia_Ferrari",
                     "name": "Ferrari",
                     "nationality": "Italian"
                 },
@@ -99,7 +99,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "perez",
-                    "url": "http://en.wikipedia.org/wiki/Sergio_P%C3%A9rez",
+                    "url": "https://en.wikipedia.org/wiki/Sergio_P%C3%A9rez",
                     "givenName": "Sergio",
                     "familyName": "Pérez",
                     "dateOfBirth": "1990-01-26",
@@ -110,7 +110,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "red_bull",
-                    "url": "http://en.wikipedia.org/wiki/Red_Bull_Racing",
+                    "url": "https://en.wikipedia.org/wiki/Red_Bull_Racing",
                     "name": "Red Bull",
                     "nationality": "Austrian"
                 },
@@ -143,7 +143,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "sainz",
-                    "url": "http://en.wikipedia.org/wiki/Carlos_Sainz_Jr.",
+                    "url": "https://en.wikipedia.org/wiki/Carlos_Sainz_Jr.",
                     "givenName": "Carlos",
                     "familyName": "Sainz",
                     "dateOfBirth": "1994-09-01",
@@ -154,7 +154,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "ferrari",
-                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                    "url": "https://en.wikipedia.org/wiki/Scuderia_Ferrari",
                     "name": "Ferrari",
                     "nationality": "Italian"
                 },
@@ -187,7 +187,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "russell",
-                    "url": "http://en.wikipedia.org/wiki/George_Russell_%28racing_driver%29",
+                    "url": "https://en.wikipedia.org/wiki/George_Russell_%28racing_driver%29",
                     "givenName": "George",
                     "familyName": "Russell",
                     "dateOfBirth": "1998-02-15",
@@ -198,7 +198,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "mercedes",
-                    "url": "http://en.wikipedia.org/wiki/Mercedes-Benz_in_Formula_One",
+                    "url": "https://en.wikipedia.org/wiki/Mercedes-Benz_in_Formula_One",
                     "name": "Mercedes",
                     "nationality": "German"
                 },
@@ -231,7 +231,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "norris",
-                    "url": "http://en.wikipedia.org/wiki/Lando_Norris",
+                    "url": "https://en.wikipedia.org/wiki/Lando_Norris",
                     "givenName": "Lando",
                     "familyName": "Norris",
                     "dateOfBirth": "1999-11-13",
@@ -242,7 +242,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "mclaren",
-                    "url": "http://en.wikipedia.org/wiki/McLaren",
+                    "url": "https://en.wikipedia.org/wiki/McLaren",
                     "name": "McLaren",
                     "nationality": "British"
                 },
@@ -275,7 +275,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "ocon",
-                    "url": "http://en.wikipedia.org/wiki/Esteban_Ocon",
+                    "url": "https://en.wikipedia.org/wiki/Esteban_Ocon",
                     "givenName": "Esteban",
                     "familyName": "Ocon",
                     "dateOfBirth": "1996-09-17",
@@ -286,7 +286,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "alpine",
-                    "url": "http://en.wikipedia.org/wiki/Alpine_F1_Team",
+                    "url": "https://en.wikipedia.org/wiki/Alpine_F1_Team",
                     "name": "Alpine F1 Team",
                     "nationality": "French"
                 },
@@ -319,7 +319,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "stroll",
-                    "url": "http://en.wikipedia.org/wiki/Lance_Stroll",
+                    "url": "https://en.wikipedia.org/wiki/Lance_Stroll",
                     "givenName": "Lance",
                     "familyName": "Stroll",
                     "dateOfBirth": "1998-10-29",
@@ -330,7 +330,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "aston_martin",
-                    "url": "http://en.wikipedia.org/wiki/Aston_Martin_in_Formula_One",
+                    "url": "https://en.wikipedia.org/wiki/Aston_Martin_in_Formula_One",
                     "name": "Aston Martin",
                     "nationality": "British"
                 },
@@ -363,7 +363,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "ricciardo",
-                    "url": "http://en.wikipedia.org/wiki/Daniel_Ricciardo",
+                    "url": "https://en.wikipedia.org/wiki/Daniel_Ricciardo",
                     "givenName": "Daniel",
                     "familyName": "Ricciardo",
                     "dateOfBirth": "1989-07-01",
@@ -374,7 +374,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "mclaren",
-                    "url": "http://en.wikipedia.org/wiki/McLaren",
+                    "url": "https://en.wikipedia.org/wiki/McLaren",
                     "name": "McLaren",
                     "nationality": "British"
                 },
@@ -407,7 +407,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "vettel",
-                    "url": "http://en.wikipedia.org/wiki/Sebastian_Vettel",
+                    "url": "https://en.wikipedia.org/wiki/Sebastian_Vettel",
                     "givenName": "Sebastian",
                     "familyName": "Vettel",
                     "dateOfBirth": "1987-07-03",
@@ -418,7 +418,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "aston_martin",
-                    "url": "http://en.wikipedia.org/wiki/Aston_Martin_in_Formula_One",
+                    "url": "https://en.wikipedia.org/wiki/Aston_Martin_in_Formula_One",
                     "name": "Aston Martin",
                     "nationality": "British"
                 },
@@ -451,7 +451,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "tsunoda",
-                    "url": "http://en.wikipedia.org/wiki/Yuki_Tsunoda",
+                    "url": "https://en.wikipedia.org/wiki/Yuki_Tsunoda",
                     "givenName": "Yuki",
                     "familyName": "Tsunoda",
                     "dateOfBirth": "2000-05-11",
@@ -462,7 +462,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "alphatauri",
-                    "url": "http://en.wikipedia.org/wiki/Scuderia_AlphaTauri",
+                    "url": "https://en.wikipedia.org/wiki/Scuderia_AlphaTauri",
                     "name": "AlphaTauri",
                     "nationality": "Italian"
                 },
@@ -495,7 +495,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "zhou",
-                    "url": "http://en.wikipedia.org/wiki/Guanyu_Zhou",
+                    "url": "https://en.wikipedia.org/wiki/Guanyu_Zhou",
                     "givenName": "Guanyu",
                     "familyName": "Zhou",
                     "dateOfBirth": "1999-05-30",
@@ -506,7 +506,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "alfa",
-                    "url": "http://en.wikipedia.org/wiki/Alfa_Romeo_in_Formula_One",
+                    "url": "https://en.wikipedia.org/wiki/Alfa_Romeo_in_Formula_One",
                     "name": "Alfa Romeo",
                     "nationality": "Swiss"
                 },
@@ -536,7 +536,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "albon",
-                    "url": "http://en.wikipedia.org/wiki/Alexander_Albon",
+                    "url": "https://en.wikipedia.org/wiki/Alexander_Albon",
                     "givenName": "Alexander",
                     "familyName": "Albon",
                     "dateOfBirth": "1996-03-23",
@@ -547,7 +547,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "williams",
-                    "url": "http://en.wikipedia.org/wiki/Williams_Grand_Prix_Engineering",
+                    "url": "https://en.wikipedia.org/wiki/Williams_Grand_Prix_Engineering",
                     "name": "Williams",
                     "nationality": "British"
                 },
@@ -577,7 +577,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "gasly",
-                    "url": "http://en.wikipedia.org/wiki/Pierre_Gasly",
+                    "url": "https://en.wikipedia.org/wiki/Pierre_Gasly",
                     "givenName": "Pierre",
                     "familyName": "Gasly",
                     "dateOfBirth": "1996-02-07",
@@ -588,7 +588,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "alphatauri",
-                    "url": "http://en.wikipedia.org/wiki/Scuderia_AlphaTauri",
+                    "url": "https://en.wikipedia.org/wiki/Scuderia_AlphaTauri",
                     "name": "AlphaTauri",
                     "nationality": "Italian"
                 },
@@ -618,7 +618,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "bottas",
-                    "url": "http://en.wikipedia.org/wiki/Valtteri_Bottas",
+                    "url": "https://en.wikipedia.org/wiki/Valtteri_Bottas",
                     "givenName": "Valtteri",
                     "familyName": "Bottas",
                     "dateOfBirth": "1989-08-28",
@@ -629,7 +629,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "alfa",
-                    "url": "http://en.wikipedia.org/wiki/Alfa_Romeo_in_Formula_One",
+                    "url": "https://en.wikipedia.org/wiki/Alfa_Romeo_in_Formula_One",
                     "name": "Alfa Romeo",
                     "nationality": "Swiss"
                 },
@@ -659,7 +659,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "mick_schumacher",
-                    "url": "http://en.wikipedia.org/wiki/Mick_Schumacher",
+                    "url": "https://en.wikipedia.org/wiki/Mick_Schumacher",
                     "givenName": "Mick",
                     "familyName": "Schumacher",
                     "dateOfBirth": "1999-03-22",
@@ -670,7 +670,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "haas",
-                    "url": "http://en.wikipedia.org/wiki/Haas_F1_Team",
+                    "url": "https://en.wikipedia.org/wiki/Haas_F1_Team",
                     "name": "Haas F1 Team",
                     "nationality": "American"
                 },
@@ -700,7 +700,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "kevin_magnussen",
-                    "url": "http://en.wikipedia.org/wiki/Kevin_Magnussen",
+                    "url": "https://en.wikipedia.org/wiki/Kevin_Magnussen",
                     "givenName": "Kevin",
                     "familyName": "Magnussen",
                     "dateOfBirth": "1992-10-05",
@@ -711,7 +711,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "haas",
-                    "url": "http://en.wikipedia.org/wiki/Haas_F1_Team",
+                    "url": "https://en.wikipedia.org/wiki/Haas_F1_Team",
                     "name": "Haas F1 Team",
                     "nationality": "American"
                 },
@@ -741,7 +741,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "hamilton",
-                    "url": "http://en.wikipedia.org/wiki/Lewis_Hamilton",
+                    "url": "https://en.wikipedia.org/wiki/Lewis_Hamilton",
                     "givenName": "Lewis",
                     "familyName": "Hamilton",
                     "dateOfBirth": "1985-01-07",
@@ -752,7 +752,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "mercedes",
-                    "url": "http://en.wikipedia.org/wiki/Mercedes-Benz_in_Formula_One",
+                    "url": "https://en.wikipedia.org/wiki/Mercedes-Benz_in_Formula_One",
                     "name": "Mercedes",
                     "nationality": "German"
                 },
@@ -782,7 +782,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "latifi",
-                    "url": "http://en.wikipedia.org/wiki/Nicholas_Latifi",
+                    "url": "https://en.wikipedia.org/wiki/Nicholas_Latifi",
                     "givenName": "Nicholas",
                     "familyName": "Latifi",
                     "dateOfBirth": "1995-06-29",
@@ -793,7 +793,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "williams",
-                    "url": "http://en.wikipedia.org/wiki/Williams_Grand_Prix_Engineering",
+                    "url": "https://en.wikipedia.org/wiki/Williams_Grand_Prix_Engineering",
                     "name": "Williams",
                     "nationality": "British"
                 },
@@ -823,7 +823,7 @@ def get_2022_22_results():
                 "Driver": {
                     "timestamp": None,
                     "driverId": "alonso",
-                    "url": "http://en.wikipedia.org/wiki/Fernando_Alonso",
+                    "url": "https://en.wikipedia.org/wiki/Fernando_Alonso",
                     "givenName": "Fernando",
                     "familyName": "Alonso",
                     "dateOfBirth": "1981-07-29",
@@ -834,7 +834,7 @@ def get_2022_22_results():
                 "Constructor": {
                     "timestamp": None,
                     "constructorId": "alpine",
-                    "url": "http://en.wikipedia.org/wiki/Alpine_F1_Team",
+                    "url": "https://en.wikipedia.org/wiki/Alpine_F1_Team",
                     "name": "Alpine F1 Team",
                     "nationality": "French"
                 },
