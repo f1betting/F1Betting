@@ -9,6 +9,16 @@
     <a href="https://github.com/f1betting/F1Betting/issues">Report Bug</a>
     ·
     <a href="https://github.com/f1betting/F1Betting/issues">Request Feature</a>
+    <br />
+    <br />
+    <img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/f1betting/f1betting?label=Version">
+    <br />
+    <img alt="SonarCloud coverage" src="https://sonarcloud.io/api/project_badges/measure?project=f1betting_F1Betting&metric=coverage">
+    <img alt="SonarCloud quality gate" src="https://sonarcloud.io/api/project_badges/measure?project=f1betting_F1Betting&metric=alert_status">
+    <img alt="SonarCloud code smells" src="https://sonarcloud.io/api/project_badges/measure?project=f1betting_F1Betting&metric=code_smells">
+    <br />
+    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/f1betting/F1Betting/Python%20on%20Push%20Master?label=Build">
+    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/f1betting/F1Betting/Docker%20Build%20and%20Push?label=Docker">
   </p>
 </div>
 
@@ -80,13 +90,13 @@ GOOGLE_ID=
 1. You can use the docker image from the DockerHub [repository](https://hub.docker.com/r/nieko3/f1betting) using:
 
    ````shell
-   $ docker pull nieko3/f1betting:v1.2.1
+   $ docker pull nieko3/f1betting:latest
    ````
 
 2. Run container using:
 
     ````shell
-    $ docker run --env-file ./.env -d --name f1betting -p 8001:80 f1betting:v1.2.1
+    $ docker run --env-file ./.env -d --name f1betting -p 8001:80 f1betting:latest
     ````
 
 ### 🏡 Running locally
