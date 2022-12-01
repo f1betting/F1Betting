@@ -3,6 +3,11 @@ on: [ workflow_call ]
 jobs:
   testing:
     runs-on: ubuntu-latest
+    env:
+      DB_URI: ${{ secrets.DB_URI }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      F1_API: ${{ secrets.F1_API }}
+      GOOGLE_ID: ${{ secrets.GOOGLE_ID }}
     steps:
       # setup
       - uses: actions/checkout@v3
@@ -18,11 +23,6 @@ jobs:
       # testing
       - name: Test with pytest
         run: coverage run --source=app --branch -m unittest discover -v
-        env:
-          DB_URI: ${{ secrets.DB_URI }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          F1_API: ${{ secrets.F1_API }}
-          GOOGLE_ID: ${{ secrets.GOOGLE_ID }}
       - name: Testing rapport
         run: python -m coverage xml
       # display report
