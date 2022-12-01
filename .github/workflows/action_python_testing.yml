@@ -3,11 +3,6 @@ on: [ workflow_call ]
 jobs:
   testing:
     runs-on: ubuntu-latest
-    env:
-      DB_URI: ${{ secrets.DB_URI }}
-      DB_NAME: ${{ secrets.DB_NAME }}
-      F1_API: ${{ secrets.F1_API }}
-      GOOGLE_ID: ${{ secrets.GOOGLE_ID }}
     steps:
       # setup
       - uses: actions/checkout@v3
@@ -22,6 +17,7 @@ jobs:
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "F1_API=${{ secrets.F1_API }}" >> .env
           echo "GOOGLE_ID=${{ secrets.GOOGLE_ID }}" >> .env
+          cat .env
       # dependency's
       - name: Install dependencies
         run: |
