@@ -9,7 +9,7 @@ from app.main import app
 from tests.mock_data.mock_users import get_all_users_data, get_user_by_id_data, create_user_data, create_bet_data
 
 
-class TestRoundPoints(unittest.TestCase):
+class TestUsers(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.test_client = TestClient(app)
