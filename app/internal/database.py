@@ -7,6 +7,7 @@ from pymongo.database import Database
 
 # Database class using MongoDB
 class BettingDatabase:
+    # pylint: disable=too-few-public-methods
     client: MongoClient
     database: Database
 

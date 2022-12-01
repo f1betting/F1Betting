@@ -72,7 +72,7 @@ def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
     # Fetch next event
     url = f"{host}/event/next"
 
-    res = requests.get(url)
+    res = requests.get(url, timeout=15)
     data = res.json()
 
     # Capitalize driver abbreviation codes for consistency
@@ -88,7 +88,7 @@ def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
 
     # Fetch drivers
     drivers_url = f"{host}/drivers/{data['season']}"
-    drivers_res = requests.get(drivers_url)
+    drivers_res = requests.get(drivers_url, timeout=15)
     drivers_data = drivers_res.json()
     drivers = drivers_data["drivers"]
 
@@ -153,7 +153,7 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
     # Fetch next event
     url = f"{host}/event/next"
 
-    res = requests.get(url)
+    res = requests.get(url, timeout=15)
     data = res.json()
 
     # Fetch existing bet
@@ -166,7 +166,7 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
 
     # Fetch drivers
     drivers_url = f"{host}/drivers/{data['season']}"
-    drivers_res = requests.get(drivers_url)
+    drivers_res = requests.get(drivers_url, timeout=15)
     drivers_data = drivers_res.json()
     drivers = drivers_data["drivers"]
 
@@ -177,7 +177,7 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
         driver_codes.append(driver["code"])
 
     # Check for invalid codes
-    if not p1.upper() in driver_codes or not p2.upper() in driver_codes or not p3.upper() in driver_codes:
+    if p1.upper() not in driver_codes or p2.upper() not in driver_codes or p3.upper() not in driver_codes:
         return JSONResponse(status_code=404, content=create_message("Driver not found"))
 
     # Update bet
@@ -217,7 +217,7 @@ def delete_bet(auth_user: User = Depends(decode_user)):
     # Fetch next event
     url = f"{host}/event/next"
 
-    res = requests.get(url)
+    res = requests.get(url, timeout=15)
     data = res.json()
 
     # Find bet
