@@ -9,6 +9,7 @@ on:
 jobs:
   testing:
     uses: ./.github/workflows/action_python_testing.yml
+    secrets: inherit
   linting:
     uses: ./.github/workflows/action_python_linting.yml
 
