@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from fastapi.responses import JSONResponse
 
 from app.internal.database import database
+from app.internal.logic.errors import data_not_found
 from app.internal.models.betting.season import Seasons
 from app.internal.models.general.message import Message, create_message
 
@@ -33,7 +33,7 @@ def get_seasons():
     seasons = list(database["Bets"].find().distinct("season"))
 
     if not seasons:
-        return JSONResponse(status_code=404, content=create_message("Seasons not found"))
+        return data_not_found("Seasons")
 
     # Sort seasons
     seasons.sort(reverse=True)

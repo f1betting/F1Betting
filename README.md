@@ -72,16 +72,14 @@ Below are the instructions for running the API for development and general usage
 This project requires a .env file. Below is a template of the values it should contain.
 
 ````dotenv
-# Use | to separate different addresses 
-# This field is optional, leave empty if not desired
-ALLOWED_HOSTS=localhost|127.0.0.1
-
+# Database config
 DB_URI=
 DB_NAME=
 
 # URL to F1API (https://github.com/niek-o/F1API)
 F1_API=
 
+# Google Cloud project ID
 GOOGLE_ID=
 ````
 

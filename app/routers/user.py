@@ -5,6 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
 from app.internal.database import database
+from app.internal.logic.errors import data_not_found
 from app.internal.models.betting.user import UserExample, User, Users, UserPointsExample
 from app.internal.models.general.message import Message, create_message
 
@@ -35,7 +36,7 @@ def get_all_users():
     users = list(database["Users"].find({}, {"_id": 0}))
 
     if not users:
-        return JSONResponse(status_code=404, content=create_message("Users not found"))
+        return data_not_found("Users")
 
     return {"users": users}
 
@@ -58,7 +59,7 @@ def get_user_by_id(user_id: str):
     user = database["Users"].find_one({"uuid": user_id}, {"_id": 0})
 
     if not user:
-        return JSONResponse(status_code=404, content=create_message("User not found"))
+        return data_not_found("User")
 
     return user
 

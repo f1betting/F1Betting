@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 
 from app.internal.auth import decode_user
 from app.internal.database import database
+from app.internal.logic.errors import data_not_found
 from app.internal.models.betting.bet import BetExample, BaseBet, FullBet
 from app.internal.models.betting.user import User
 from app.internal.models.general.message import Message, create_message
@@ -99,7 +100,7 @@ def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
         driver_codes.append(driver["code"])
 
     # Check for invalid codes in bet
-    if not bet["p1"] in driver_codes or not bet["p2"] in driver_codes or not bet["p3"] in driver_codes:
+    if bet["p1"] not in driver_codes or bet["p2"] not in driver_codes or bet["p3"] not in driver_codes:
         return JSONResponse(status_code=404, content=create_message("Driver not found"))
 
     # Generate full bet data
@@ -178,7 +179,7 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
 
     # Check for invalid codes
     if p1.upper() not in driver_codes or p2.upper() not in driver_codes or p3.upper() not in driver_codes:
-        return JSONResponse(status_code=404, content=create_message("Driver not found"))
+        return data_not_found("Driver")
 
     # Update bet
     database["Bets"].update_one({"_id": bet["_id"]}, {"$set": {
@@ -210,7 +211,7 @@ def delete_bet(auth_user: User = Depends(decode_user)):
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
-        return JSONResponse(status_code=404, content=create_message("User not found"))
+        return data_not_found("User")
 
     host = os.getenv("F1_API")
 
@@ -224,7 +225,7 @@ def delete_bet(auth_user: User = Depends(decode_user)):
     bet = database["Bets"].find_one({"uuid": user["uuid"], "season": data["season"], "round": data["round"]})
 
     if not bet:
-        return JSONResponse(status_code=404, content=create_message("Bet not found"))
+        return data_not_found("Bet")
 
     # Delete bet
     database["Bets"].delete_one({"_id": bet["_id"]})

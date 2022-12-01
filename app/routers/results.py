@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from fastapi.responses import JSONResponse
 
 from app.internal.database import database
+from app.internal.logic.errors import data_not_found
 from app.internal.logic.results.update_users import update_users
 from app.internal.models.betting.user_results import UserResults, UserResultExample
 from app.internal.models.general.message import Message, create_message
@@ -36,7 +36,7 @@ def get_all_results_for_round(season: int, race: int):
                                       {"_id": 0, "p1": 0, "p2": 0, "p3": 0, "season": 0, "round": 0}))
 
     if not bets:
-        return JSONResponse(status_code=404, content=create_message("Bets not found"))
+        return data_not_found("Bets")
 
     # Add username to bet
     for bet in bets:
@@ -76,10 +76,10 @@ def get_standings(season: int):
     seasons = list(database["Bets"].find().distinct("season"))
 
     if season not in seasons:
-        return JSONResponse(status_code=404, content=create_message("Season not found"))
+        return data_not_found("Season")
 
     if not users:
-        return JSONResponse(status_code=404, content=create_message("Users not found"))
+        return data_not_found("Users")
 
     # List points per user for the selected season
     for user in users:
