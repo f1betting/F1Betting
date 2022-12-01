@@ -10,14 +10,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      # create env file
-      - name: Create env file
-        run: |
-          echo "DB_URI=${{ secrets.DB_URI }}" > .env
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-          echo "F1_API=${{ secrets.F1_API }}" >> .env
-          echo "GOOGLE_ID=${{ secrets.GOOGLE_ID }}" >> .env
-          cat .env
       # dependency's
       - name: Install dependencies
         run: |
@@ -26,6 +18,11 @@ jobs:
       # testing
       - name: Test with pytest
         run: coverage run --source=app --branch -m unittest discover -v
+        env:
+          DB_URI: ${{ secrets.DB_URI }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          F1_API: ${{ secrets.F1_API }}
+          GOOGLE_ID: ${{ secrets.GOOGLE_ID }}
       - name: Testing rapport
         run: python -m coverage xml
       # display report
