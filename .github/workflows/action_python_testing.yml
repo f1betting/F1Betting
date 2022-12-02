@@ -1,8 +1,12 @@
 on: [ workflow_call ]
 
 jobs:
+  mockserver:
+    uses: ./.github/workflows/action_mockserver.yml
+
   testing:
     runs-on: ubuntu-latest
+    needs: [ mockserver ]
     steps:
       # setup
       - uses: actions/checkout@v3
