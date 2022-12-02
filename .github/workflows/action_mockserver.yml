@@ -10,6 +10,7 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: mockserver/mockserver:latest
+          options: -v ${{ github.workspace }}:/data
           run: |
             curl -X 'PUT' \
               'http://localhost:1080/mockserver/openapi' \
