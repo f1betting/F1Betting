@@ -22,10 +22,13 @@ jobs:
           node-version: "18"
       - run: |
           yarn global add @stoplight/prism-cli pm2
+          echo "#!/bin/bash" > start.sh
+          echo "prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json --upstream-proxy ${{ secrets.F1_API }}" >> start.sh
+          sudo chmod +x start.sh
       # testing
       - name: Test with pytest
         run: |
-          pm2 start "prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json --upstream-proxy ${{ secrets.F1_API }}" --name "PrismServer"
+          pm2 start "start.sh" --name "PrismServer"
           coverage run --source=app --branch -m unittest discover -v
           pm2 stop PrismServer
         env:
