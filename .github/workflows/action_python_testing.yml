@@ -20,14 +20,14 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "18"
-      - name: Start prism server in background
-        uses: cypress-io/github-action@v5
-        with:
-          command: npm install -g @stoplight/prism-cli
-          start: prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json
+      - run: |
+          yarn global add @stoplight/prism-cli pm2
       # testing
       - name: Test with pytest
-        run: coverage run --source=app --branch -m unittest discover -v
+        run: |
+          pm2 start "prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json --upstream-proxy ${{ secrets.F1_API }}" --name "PrismServer"
+          coverage run --source=app --branch -m unittest discover -v
+          pm2 stop PrismServer
         env:
           DB_URI: ${{ secrets.DB_URI }}
           DB_NAME: ${{ secrets.DB_NAME }}
