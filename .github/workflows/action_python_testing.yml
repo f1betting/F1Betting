@@ -30,13 +30,12 @@ jobs:
         run: |
           pm2 start "start.sh" --name "PrismServer"
           sleep 10s
-          curl http://localhost:4010/calendar/2022
           coverage run --source=app --branch -m unittest discover -v
           pm2 stop PrismServer
         env:
           DB_URI: ${{ secrets.DB_URI }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          F1_API: localhost:4010
+          DB_NAME: Testing
+          F1_API: http://localhost:4010
           GOOGLE_ID: ${{ secrets.GOOGLE_ID }}
       - name: Testing rapport
         run: python -m coverage xml
