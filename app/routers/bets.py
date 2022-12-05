@@ -36,13 +36,13 @@ def get_bet(season: int, race: int, auth_user: User = Depends(decode_user)):
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
-        return JSONResponse(status_code=404, content=create_message("User not found"))
+        return data_not_found("User")
 
     # Fetch bet
     bet = database["Bets"].find_one({"uuid": user["uuid"], "season": season, "round": race})
 
     if not bet:
-        return JSONResponse(status_code=404, content=create_message("Bet not found"))
+        return data_not_found("Bet")
 
     # Return bet
     return bet
@@ -101,7 +101,7 @@ def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
 
     # Check for invalid codes in bet
     if bet["p1"] not in driver_codes or bet["p2"] not in driver_codes or bet["p3"] not in driver_codes:
-        return JSONResponse(status_code=404, content=create_message("Driver not found"))
+        return data_not_found("Driver")
 
     # Generate full bet data
     bet["season"] = data["season"]
@@ -113,7 +113,7 @@ def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
-        return JSONResponse(status_code=404, content=create_message("User not found"))
+        return data_not_found("User")
 
     # Check if user already has made a bet
     if list(database["Bets"].find(
@@ -147,7 +147,7 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
-        return JSONResponse(status_code=404, content=create_message("User not found"))
+        return data_not_found("User")
 
     host = os.getenv("F1_API")
 
@@ -161,7 +161,7 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
     bet = database["Bets"].find_one({"uuid": user["uuid"], "season": data["season"], "round": data["round"]})
 
     if not bet:
-        return JSONResponse(status_code=404, content=create_message("Bet not found"))
+        return data_not_found("Bet")
 
     host = os.getenv("F1_API")
 
