@@ -78,9 +78,6 @@ def get_standings(season: int):
     if season not in seasons:
         return data_not_found("Season")
 
-    if not users:
-        return data_not_found("Users")
-
     # List points per user for the selected season
     for user in users:
         user["points"] = user[f"points_{season}"]
