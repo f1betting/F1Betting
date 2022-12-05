@@ -16,10 +16,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./requirements.txt
       # prism mockserver
-      - name: Start MockServer
+      - name: Setup Node
         uses: actions/setup-node@v2
         with:
           node-version: "18"
+      - name: Start prism server
         run: |
           yarn global add @stoplight/prism-cli
           prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json
