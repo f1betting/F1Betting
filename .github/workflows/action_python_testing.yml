@@ -29,6 +29,9 @@ jobs:
       - name: Test with pytest
         run: |
           pm2 start "start.sh" --name "PrismServer"
+          curl -X 'GET' \
+          '${{ secrets.F1_API }}/calendar/2022' \
+          -H 'accept: application/json'
           coverage run --source=app --branch -m unittest discover -v
           pm2 stop PrismServer
         env:
