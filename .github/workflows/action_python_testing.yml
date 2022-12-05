@@ -25,6 +25,7 @@ jobs:
           echo "#!/bin/bash" > start.sh
           echo "prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json" >> start.sh
           sudo chmod +x start.sh
+          cat start.sh
       # testing
       - name: Test with pytest
         run: |
