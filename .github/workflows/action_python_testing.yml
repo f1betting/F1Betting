@@ -25,11 +25,11 @@ jobs:
           echo "#!/bin/bash" > start.sh
           echo "prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json" >> start.sh
           sudo chmod +x start.sh
-          cat start.sh
       # testing
       - name: Test with pytest
         run: |
           pm2 start "start.sh" --name "PrismServer"
+          sleep 10s
           curl http://localhost:4010/calendar/2022
           coverage run --source=app --branch -m unittest discover -v
           pm2 stop PrismServer
