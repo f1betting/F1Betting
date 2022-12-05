@@ -27,6 +27,10 @@ class TestUsers(unittest.TestCase):
         database.drop_collection("Users")
         database.drop_collection("Bets")
 
+    ##########
+    # /users #
+    ##########
+
     def test_get_all_users(self):
         user_id = str(uuid.uuid4())
         data = create_user_data(user_id)
@@ -39,24 +43,10 @@ class TestUsers(unittest.TestCase):
 
         self.assertEqual(res, mock_data)
 
-    def test_get_user_by_id(self):
-        user_id = str(uuid.uuid4())
-        data = create_user_data(user_id)
+    def test_get_all_users_404(self):
+        res = self.test_client.get("/users")
 
-        bet_data = create_bet_data(user_id)
-
-        database["Users"].insert_one(data)
-
-        database["Bets"].insert_one(bet_data)
-
-        # TODO: F1 API MOCKING
-        update_users()
-
-        res = self.test_client.get(f"/users/{user_id}").json()
-
-        mock_data = get_user_by_id_data(user_id)
-
-        self.assertEqual(res, mock_data)
+        self.assertEqual(res.status_code, 404)
 
     def test_create_user(self):
         user_id = str(uuid.uuid4())
@@ -67,3 +57,46 @@ class TestUsers(unittest.TestCase):
         created_user = database["Users"].find_one({"uuid": user_id}, {"_id": False})
 
         self.assertTrue(res == data == created_user)
+
+    def test_create_user_no_uuid(self):
+        self.test_client.post("/users", json={"username": "test_user_214"}).json()
+
+        created_user = database["Users"].find_one({"username": "test_user_214"}, {"_id": False})
+
+        self.assertTrue(created_user["uuid"])
+
+    def test_create_user_409(self):
+        user_id = str(uuid.uuid4())
+        data = create_user_data(user_id)
+
+        self.test_client.post("/users", json=data).json()
+        res = self.test_client.post("/users", json=data)
+
+        self.assertTrue(res.status_code, 409)
+
+    ####################
+    # /users/{user_id} #
+    ####################
+
+    def test_get_user_by_id(self):
+        user_id = str(uuid.uuid4())
+        data = create_user_data(user_id)
+
+        bet_data = create_bet_data(user_id)
+
+        database["Users"].insert_one(data)
+
+        database["Bets"].insert_one(bet_data)
+
+        update_users()
+
+        res = self.test_client.get(f"/users/{user_id}").json()
+
+        mock_data = get_user_by_id_data(user_id)
+
+        self.assertEqual(res, mock_data)
+
+    def test_get_user_by_id_404(self):
+        res = self.test_client.get(f"/users/{str(uuid.uuid4())}")
+
+        self.assertEqual(res.status_code, 404)
