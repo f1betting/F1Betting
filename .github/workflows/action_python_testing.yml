@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: "18"
       - name: Start prism server in background
-        uses: BerniWittmann/background-server-action@latest
+        uses: cypress-io/github-action@v5
         with:
           command: yarn global add @stoplight/prism-cli
           start: prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json
