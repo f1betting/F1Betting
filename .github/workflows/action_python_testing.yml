@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "18"
-      - run: |
+        run: |
           yarn global add @stoplight/prism-cli
           prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json
           prism proxy ${{ secrets.F1_API }} --errors
