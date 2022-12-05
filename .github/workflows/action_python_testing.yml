@@ -20,11 +20,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "18"
-      - name: Start prism server
-        run: |
-          yarn global add @stoplight/prism-cli
-          prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json
-          prism proxy ${{ secrets.F1_API }} --errors
+      - name: Start prism server in background
+        uses: BerniWittmann/background-server-action@latest
+        with:
+          command: yarn global add @stoplight/prism-cli
+          start: prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json
       # testing
       - name: Test with pytest
         run: coverage run --source=app --branch -m unittest discover -v
