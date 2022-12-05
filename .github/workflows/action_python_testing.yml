@@ -16,7 +16,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./requirements.txt
       - name: Start MockServer
-        uses: actions/f1betting/mockserver-v0@main
+        uses: f1betting/mockserver-v0@main
       # testing
       - name: Test with pytest
         run: coverage run --source=app --branch -m unittest discover -v
