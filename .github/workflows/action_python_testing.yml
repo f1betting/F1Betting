@@ -15,8 +15,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r ./requirements.txt
+      # prism mockserver
       - name: Start MockServer
-        uses: f1betting/MockF1API@main
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+      - run: |
+          yarn global add @stoplight/prism-cli
+          prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json
+          prism proxy ${{ secrets.F1_API }} --errors
       # testing
       - name: Test with pytest
         run: coverage run --source=app --branch -m unittest discover -v
