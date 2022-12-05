@@ -23,8 +23,7 @@ jobs:
       - name: Start prism server in background
         uses: cypress-io/github-action@v5
         with:
-          install-command: yarn install
-          command: yarn global add @stoplight/prism-cli
+          command: npm install -g @stoplight/prism-cli
           start: prism mock https://raw.githubusercontent.com/f1betting/F1API/main/OpenAPI.json
       # testing
       - name: Test with pytest
