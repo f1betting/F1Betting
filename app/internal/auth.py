@@ -14,14 +14,16 @@ from app.internal.models.betting.user import User
 token_auth_scheme = HTTPBearer()
 
 
-def decode_token(token):
-    request = requests.Request()
+class Auth:  # pragma: no coverage
+    @staticmethod
+    def decode_token(token):
+        request = requests.Request()
 
-    user = id_token.verify_oauth2_token(token.credentials, request, audience=os.getenv("GOOGLE_ID"))
+        user = id_token.verify_oauth2_token(token.credentials, request, audience=os.getenv("GOOGLE_ID"))
 
-    return User(username=user["name"].lower(), uuid=user["sub"])
+        return User(username=user["name"].lower(), uuid=user["sub"])
 
-
-def decode_user(token: jwt = Depends(token_auth_scheme)):
-    user = decode_token(token)
-    return user
+    @staticmethod
+    def decode_user(token: jwt = Depends(token_auth_scheme)):
+        user = Auth.decode_token(token)
+        return user

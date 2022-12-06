@@ -24,6 +24,12 @@ def create_user_data(uuid):
     }
 
 
+def create_bet_post_data():
+    return {
+
+    }
+
+
 def create_bet_data(uuid):
     return {
         "p1": "VER",

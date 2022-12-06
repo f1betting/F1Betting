@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from app.internal.auth import decode_user
+from app.internal.auth import Auth
 from app.internal.database import database
 from app.internal.logic.errors import data_not_found
 from app.internal.models.betting.bet import BetExample, BaseBet, FullBet
@@ -15,7 +15,6 @@ from app.internal.models.general.message import Message, create_message
 router = APIRouter(
     tags=["Bet"],
 )
-
 
 @router.get("/bet/{season}/{race}",
             response_model=FullBet,
@@ -31,7 +30,7 @@ router = APIRouter(
                     }
                 }},
             })
-def get_bet(season: int, race: int, auth_user: User = Depends(decode_user)):
+def get_bet(season: int, race: int, auth_user: User = Depends(Auth.decode_user)):
     # Fetch user
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
@@ -67,7 +66,7 @@ def get_bet(season: int, race: int, auth_user: User = Depends(decode_user)):
                      }
                  }}
              })
-def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
+def create_bet(bet: BaseBet, auth_user: User = Depends(Auth.decode_user)):
     host = os.getenv("F1_API")
 
     # Fetch next event
@@ -143,7 +142,7 @@ def create_bet(bet: BaseBet, auth_user: User = Depends(decode_user)):
                     }
                 }},
             })
-def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
+def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(Auth.decode_user)):
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
     if not user:
@@ -177,15 +176,23 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
     for driver in drivers:
         driver_codes.append(driver["code"])
 
+    p1 = p1.upper()
+    p2 = p2.upper()
+    p3 = p3.upper()
+
     # Check for invalid codes
-    if p1.upper() not in driver_codes or p2.upper() not in driver_codes or p3.upper() not in driver_codes:
+    if p1 not in driver_codes or p2 not in driver_codes or p3 not in driver_codes:
         return data_not_found("Driver")
+
+    # Check for duplicates
+    if p1 == p2 or p2 == p3 or p1 == p3:
+        return JSONResponse(status_code=409, content=create_message("Duplicate drivers"))
 
     # Update bet
     database["Bets"].update_one({"_id": bet["_id"]}, {"$set": {
-        "p1": p1.upper(),
-        "p2": p2.upper(),
-        "p3": p3.upper()
+        "p1": p1,
+        "p2": p2,
+        "p3": p3
     }})
 
     return create_message("Bet updated successfully")
@@ -206,7 +213,7 @@ def edit_bet(p1: str, p2: str, p3: str, auth_user: User = Depends(decode_user)):
                        }
                    }},
                })
-def delete_bet(auth_user: User = Depends(decode_user)):
+def delete_bet(auth_user: User = Depends(Auth.decode_user)):
     # Fetch user
     user = database["Users"].find_one({"username": auth_user.username, "uuid": auth_user.uuid})
 
