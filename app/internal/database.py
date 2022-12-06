@@ -18,9 +18,6 @@ class BettingDatabase:
         self.database = self.client[os.getenv("DB_NAME")]
         print("Connected to the MongoDB database!")
 
-    def shutdown(self):
-        self.client.close()
-
 
 # Create database instance
 db = BettingDatabase()

@@ -7,7 +7,7 @@
       "name": "MIT",
       "url": "https://github.com/niek-o/F1Betting/blob/main/LICENSE.md"
     },
-    "version": "1.4.0",
+    "version": "1.4.1",
     "x-logo": {
       "url": "https://upload.wikimedia.org/wikipedia/commons/f/f2/New_era_F1_logo.png"
     }
@@ -32,7 +32,7 @@
                   "users": [
                     {
                       "username": "Niek",
-                      "uuid": "d586a0f8-bc2a-4f2f-bb81-088e089517ab"
+                      "uuid": "6f61f594-f318-4c74-8d41-4d7fee3b5024"
                     }
                   ]
                 }
@@ -80,7 +80,7 @@
                 },
                 "example": {
                   "username": "Niek",
-                  "uuid": "d586a0f8-bc2a-4f2f-bb81-088e089517ab"
+                  "uuid": "6f61f594-f318-4c74-8d41-4d7fee3b5024"
                 }
               }
             }
@@ -139,7 +139,7 @@
                 },
                 "example": {
                   "username": "niek",
-                  "uuid": "62126f24-9f8b-43f2-826a-887c3dfbbc64",
+                  "uuid": "ac82bc61-67fd-4b84-8057-eac4b999e616",
                   "points_2022": 19
                 }
               }

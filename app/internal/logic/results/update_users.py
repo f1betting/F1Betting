@@ -41,7 +41,7 @@ def update_points_per_bet(season):
                     database["Bets"].update_one({"uuid": bet["uuid"], "round": race}, {"$set": {
                         "points": round_points
                     }})
-        except JSONDecodeError:
+        except JSONDecodeError:  # pragma: no coverage
             print("Something went wrong with fetching the race results")
 
 
