@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 
 from app.internal.database import database
 from app.internal.logic.results.update_users import update_users
+from app.internal.models.general.message import create_message
 from app.main import app
 from tests.mock_data.mock_users import get_all_users_data, get_user_by_id_data, create_user_data, create_bet_data
 
@@ -46,6 +47,9 @@ class TestUsers(unittest.TestCase):
     def test_get_all_users_404(self):
         res = self.test_client.get("/users")
 
+        error = create_message("Users not found")
+
+        self.assertEqual(res.json(), error)
         self.assertEqual(res.status_code, 404)
 
     def test_create_user(self):
@@ -72,7 +76,10 @@ class TestUsers(unittest.TestCase):
         self.test_client.post("/users", json=data).json()
         res = self.test_client.post("/users", json=data)
 
-        self.assertTrue(res.status_code, 409)
+        error = create_message("User already exists")
+
+        self.assertEqual(res.json(), error)
+        self.assertEqual(res.status_code, 409)
 
     ####################
     # /users/{user_id} #
@@ -99,4 +106,7 @@ class TestUsers(unittest.TestCase):
     def test_get_user_by_id_404(self):
         res = self.test_client.get(f"/users/{str(uuid.uuid4())}")
 
+        error = create_message("User not found")
+
+        self.assertEqual(res.json(), error)
         self.assertEqual(res.status_code, 404)

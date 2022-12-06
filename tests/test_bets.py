@@ -11,7 +11,7 @@ from tests.mock_data.mock_bets import create_bet_data, create_bet_put_data, crea
 from tests.mock_data.mock_users import create_user_data
 
 
-class TestUsers(unittest.TestCase):
+class TestBets(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.test_client = TestClient(app)

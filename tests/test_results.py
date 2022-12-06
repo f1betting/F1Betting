@@ -5,12 +5,13 @@ from fastapi.testclient import TestClient
 
 from app.internal.database import database
 from app.internal.logic.results.update_users import update_users
+from app.internal.models.general.message import create_message
 from app.main import app
 from tests.mock_data.mock_results import get_standings_2022_data
 from tests.mock_data.mock_users import create_user_data, create_bet_data
 
 
-class TestUsers(unittest.TestCase):
+class TestResults(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.test_client = TestClient(app)
@@ -56,6 +57,9 @@ class TestUsers(unittest.TestCase):
 
         res = self.test_client.get(f"/results/race/2022/22")
 
+        error = create_message("Bets not found")
+
+        self.assertEqual(res.json(), error)
         self.assertEqual(res.status_code, 404)
 
     ###############################
@@ -78,7 +82,7 @@ class TestUsers(unittest.TestCase):
 
         self.assertEqual(res, mock_data)
 
-    def test_get_standings_404_season(self):
+    def test_get_standings_404(self):
         user_id = str(uuid.uuid4())
         data = create_user_data(user_id)
 
@@ -90,4 +94,7 @@ class TestUsers(unittest.TestCase):
 
         res = self.test_client.get(f"/results/standings/2021")
 
+        error = create_message("Season not found")
+
+        self.assertEqual(res.json(), error)
         self.assertEqual(res.status_code, 404)

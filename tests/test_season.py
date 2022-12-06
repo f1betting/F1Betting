@@ -5,11 +5,12 @@ from fastapi.testclient import TestClient
 
 from app.internal.database import database
 from app.internal.logic.results.update_users import update_users
+from app.internal.models.general.message import create_message
 from app.main import app
 from tests.mock_data.mock_users import create_user_data, create_bet_data
 
 
-class TestUsers(unittest.TestCase):
+class TestSeason(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.test_client = TestClient(app)
@@ -50,4 +51,7 @@ class TestUsers(unittest.TestCase):
     def test_get_seasons_404(self):
         res = self.test_client.get("/seasons")
 
+        error = create_message("Seasons not found")
+
+        self.assertEqual(res.json(), error)
         self.assertEqual(res.status_code, 404)
