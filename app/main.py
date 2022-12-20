@@ -32,7 +32,7 @@ def custom_openapi():  # pragma: no coverage
 
     openapi_schema = get_openapi(
         title="F1 BETTING",
-        version="1.4.2",
+        version="1.4.3",
         description="An API to do bets with your friends about F1 race results!",
         license_info={
             "name": "MIT",
