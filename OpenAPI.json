@@ -5,9 +5,9 @@
     "description": "An API to do bets with your friends about F1 race results!",
     "license": {
       "name": "MIT",
-      "url": "https://github.com/niek-o/F1Betting/blob/main/LICENSE.md"
+      "url": "https://github.com/f1betting/F1Betting/blob/main/LICENSE.md"
     },
-    "version": "1.4.1",
+    "version": "1.4.2",
     "x-logo": {
       "url": "https://upload.wikimedia.org/wikipedia/commons/f/f2/New_era_F1_logo.png"
     }
@@ -32,7 +32,7 @@
                   "users": [
                     {
                       "username": "Niek",
-                      "uuid": "6f61f594-f318-4c74-8d41-4d7fee3b5024"
+                      "uuid": "5b95bd7f-d456-467d-b074-fcae8c8e4808"
                     }
                   ]
                 }
@@ -80,7 +80,7 @@
                 },
                 "example": {
                   "username": "Niek",
-                  "uuid": "6f61f594-f318-4c74-8d41-4d7fee3b5024"
+                  "uuid": "5b95bd7f-d456-467d-b074-fcae8c8e4808"
                 }
               }
             }
@@ -139,7 +139,7 @@
                 },
                 "example": {
                   "username": "niek",
-                  "uuid": "ac82bc61-67fd-4b84-8057-eac4b999e616",
+                  "uuid": "199f49ea-4f5a-4c53-8ef2-eb187581bc77",
                   "points_2022": 19
                 }
               }
